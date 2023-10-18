@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bftlhe01ovpp8"]
+
+[ext_resource type="Texture2D" uid="uid://b71clkjf23dvp" path="res://human_model/hide_helpers.png" id="1_4h4vg"]
+
+[resource]
+transparency = 1
+depth_draw_mode = 1
+albedo_color = Color(0.321569, 0.678431, 0.764706, 1)
+albedo_texture = ExtResource("1_4h4vg")

@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://bm3cp0s3d18jl"]
+
+[ext_resource type="ArrayMesh" uid="uid://ddvwoojw6m8tr" path="res://human_model/human.res" id="1_46pr0"]
+[ext_resource type="Material" uid="uid://bftlhe01ovpp8" path="res://human_model/hide_helpers_material.tres" id="2_cuy3q"]
+
+[sub_resource type="GDScript" id="GDScript_fyekg"]
+script/source = "@tool
+extends Node3D
+
+@onready var vertices = $Human.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+var b2g_index = []
+
+@export var index : int :
+	set(value):
+		index = value
+		update_index()
+		
+func _ready():
+#	print(vertices)
+	var unique_vertices = {}
+	for v in vertices.size():
+		var coords = vertices[v]
+		unique_vertices[coords] = v
+	for v in unique_vertices:
+		b2g_index.append(unique_vertices[v])
+	
+
+func update_index():
+	print(\"index updated\")
+	var godot_index = b2g_index[index]
+	var coords = vertices[godot_index]
+	$Red_Dot.global_position = coords
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q00aa"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_14sww"]
+material = SubResource("StandardMaterial3D_q00aa")
+radius = 0.05
+height = 0.1
+radial_segments = 8
+rings = 4
+
+[node name="vertex_finder" type="Node3D"]
+script = SubResource("GDScript_fyekg")
+index = 3504
+
+[node name="Human" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_46pr0")
+skeleton = NodePath("")
+blend_shapes/$md-$af-$fe-$yn = 0.0
+blend_shapes/$md-$af-$ma-$yn = 0.0
+blend_shapes/$md-$as-$fe-$yn = 0.0
+blend_shapes/$md-$as-$ma-$yn = 0.0
+blend_shapes/$md-$ca-$fe-$yn = 0.0
+blend_shapes/$md-$ca-$ma-$yn = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-$avcup-max$fi = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-maxcup-$av$fi = 0.0
+blend_shapes/$md-universal-$fe-$yn-$av$mu-$av$wg = 0.0
+blend_shapes/$md-universal-$ma-$yn-$av$mu-$av$wg = 0.0
+surface_material_override/0 = ExtResource("2_cuy3q")
+
+[node name="Red_Dot" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41041, 1.09816, 0.15517)
+mesh = SubResource("SphereMesh_14sww")
