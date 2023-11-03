@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://52ixd4kddggs"]
+[gd_scene load_steps=4 format=3 uid="uid://52ixd4kddggs"]
 
-[ext_resource type="ArrayMesh" uid="uid://cvwo57j8oi77l" path="res://generate_mesh/human_unshaded.res" id="1_i23o3"]
-[ext_resource type="Material" uid="uid://bftlhe01ovpp8" path="res://human_model/hide_helpers_material.tres" id="2_xwdd4"]
-[ext_resource type="ArrayMesh" uid="uid://cf6ha4p5jra3u" path="res://generate_mesh/human.res" id="3_3mpt7"]
+[ext_resource type="ArrayMesh" path="res://generate_mesh/human_unshaded.res" id="1_i23o3"]
+[ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human.res" id="3_3mpt7"]
 
 [sub_resource type="GDScript" id="GDScript_kec1h"]
 script/source = "extends Node3D
@@ -13,14 +12,37 @@ var mesh_arrays = []
 var ST = SurfaceTool.new()
 
 func _ready():
-#	var new_mesh = process_shape_key(\"asian-female-young\")
-#	var mesh_arrays = $Unshaded_Human.mesh.surface_get_arrays(0)
-#	print(mesh_arrays[Mesh.ARRAY_VERTEX].size())
+
 	new_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
+	make_basis()
 	for bs_index in $Unshaded_Human.get_blend_shape_count():
 		process_shape_key(bs_index)
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays,blend_shapes)
 	ResourceSaver.save(new_mesh,\"res://generate_mesh/human.res\")
+	
+func make_basis():
+	var surface_arrays = $Unshaded_Human.mesh.surface_get_arrays(0)
+	print(surface_arrays[Mesh.ARRAY_BONES].size())
+	ST.clear()
+	ST.set_skin_weight_count(SurfaceTool.SKIN_8_WEIGHTS)
+	ST.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i in surface_arrays[Mesh.ARRAY_VERTEX].size():
+		var uv = surface_arrays[Mesh.ARRAY_TEX_UV][i]
+		ST.set_uv(uv)
+		var bones = surface_arrays[Mesh.ARRAY_BONES].slice(i*8,(i*8)+4)
+		ST.set_bones(bones)
+		var weights = surface_arrays[Mesh.ARRAY_WEIGHTS].slice(i*8,(i*8)+4)
+		ST.set_weights(weights)
+		var vertex = surface_arrays[Mesh.ARRAY_VERTEX][i]
+		ST.add_vertex(vertex)
+	for index in surface_arrays[Mesh.ARRAY_INDEX]:
+		ST.add_index(index)
+	ST.generate_normals()
+	ST.generate_tangents()
+	mesh_arrays = ST.commit_to_arrays()
+	print(mesh_arrays[Mesh.ARRAY_BONES].size())
+	print(ST.get_skin_weight_count())
+	ST.clear()
 
 func process_shape_key(bs_index):
 	var bs_name = $Unshaded_Human.mesh.get_blend_shape_name(bs_index)
@@ -29,17 +51,14 @@ func process_shape_key(bs_index):
 	ST.generate_tangents()
 #	ST.commit(new_mesh)
 	var commit_array = ST.commit_to_arrays()
-	if bs_name == \"basis\":
-		mesh_arrays = commit_array
-	else:
-		new_mesh.add_blend_shape(bs_name)
-		var curr_bs = []
-		curr_bs.resize(Mesh.ARRAY_MAX)
-		curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
-		curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
-		curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
-		print(commit_array[Mesh.ARRAY_VERTEX].size())
-		blend_shapes.append(curr_bs)
+	new_mesh.add_blend_shape(bs_name)
+	var curr_bs = []
+	curr_bs.resize(Mesh.ARRAY_MAX)
+	curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
+	curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
+	curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
+	print(commit_array[Mesh.ARRAY_VERTEX].size())
+	blend_shapes.append(curr_bs)
 	ST.clear()
 "
 
@@ -64,7 +83,6 @@ blend_shapes/asian-male-baby = 0.0
 blend_shapes/asian-male-child = 0.0
 blend_shapes/asian-male-old = 0.0
 blend_shapes/asian-male-young = 0.0
-blend_shapes/basis = 0.0
 blend_shapes/caucasian-female-baby = 0.0
 blend_shapes/caucasian-female-child = 0.0
 blend_shapes/caucasian-female-old = 0.0
@@ -73,33 +91,7 @@ blend_shapes/caucasian-male-baby = 0.0
 blend_shapes/caucasian-male-child = 0.0
 blend_shapes/caucasian-male-old = 0.0
 blend_shapes/caucasian-male-young = 0.0
-surface_material_override/0 = ExtResource("2_xwdd4")
 
 [node name="Shaded_Human" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47491, 0, 0)
 mesh = ExtResource("3_3mpt7")
-blend_shapes/african-female-baby = 0.0
-blend_shapes/african-female-child = 0.0
-blend_shapes/african-female-old = 0.0
-blend_shapes/african-female-young = 0.0
-blend_shapes/african-male-baby = 0.0
-blend_shapes/african-male-child = 0.0
-blend_shapes/african-male-old = 0.0
-blend_shapes/african-male-young = 0.0
-blend_shapes/asian-female-baby = 0.0
-blend_shapes/asian-female-child = 0.0
-blend_shapes/asian-female-old = 0.0
-blend_shapes/asian-female-young = 0.0
-blend_shapes/asian-male-baby = 0.0
-blend_shapes/asian-male-child = 0.0
-blend_shapes/asian-male-old = 0.0
-blend_shapes/asian-male-young = 0.0
-blend_shapes/caucasian-female-baby = 0.0
-blend_shapes/caucasian-female-child = 0.0
-blend_shapes/caucasian-female-old = 0.0
-blend_shapes/caucasian-female-young = 0.0
-blend_shapes/caucasian-male-baby = 0.0
-blend_shapes/caucasian-male-child = 0.0
-blend_shapes/caucasian-male-old = 0.0
-blend_shapes/caucasian-male-young = 0.0
-surface_material_override/0 = ExtResource("2_xwdd4")

@@ -2,7 +2,7 @@
 
 [ext_resource type="ArrayMesh" uid="uid://ddvwoojw6m8tr" path="res://human_model/human.res" id="1_5m8e3"]
 [ext_resource type="Material" uid="uid://bftlhe01ovpp8" path="res://human_model/hide_helpers_material.tres" id="2_15w32"]
-[ext_resource type="ArrayMesh" uid="uid://cvwo57j8oi77l" path="res://generate_mesh/human_unshaded.res" id="3_8ilnl"]
+[ext_resource type="ArrayMesh" path="res://generate_mesh/human_unshaded.res" id="3_8ilnl"]
 
 [sub_resource type="GDScript" id="GDScript_nakm0"]
 script/source = "extends Node3D
@@ -15,17 +15,9 @@ var b2g_index = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	index_vertices()
-	make_basis_shape()
 	var target_files = get_target_files(\"res://shapekey_data\")
 	process_shapekeys(target_files)
 	make_mesh()
-	
-func make_basis_shape():
-	new_mesh.add_blend_shape(\"basis\")
-	var new_shape = []
-	new_shape.resize(Mesh.ARRAY_MAX)
-	new_shape[Mesh.ARRAY_VERTEX] = mesh_arrays[Mesh.ARRAY_VERTEX]
-	blend_arrays.append(new_shape)
 	
 func index_vertices():
 	var vertices = mesh_arrays[Mesh.ARRAY_VERTEX]
@@ -43,6 +35,7 @@ func make_mesh():
 	mesh_arrays[Mesh.ARRAY_NORMAL] = null
 	mesh_arrays[Mesh.ARRAY_TANGENT] = null
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays, blend_arrays)
+#	new_mesh.regen_normal_maps()
 	ResourceSaver.save(new_mesh,\"res://generate_mesh/human_unshaded.res\")
 	
 func process_shapekeys(files:Dictionary):
@@ -125,7 +118,6 @@ blend_shapes/asian-male-baby = 0.0
 blend_shapes/asian-male-child = 0.0
 blend_shapes/asian-male-old = 0.0
 blend_shapes/asian-male-young = 0.0
-blend_shapes/basis = 0.0
 blend_shapes/caucasian-female-baby = 0.0
 blend_shapes/caucasian-female-child = 0.0
 blend_shapes/caucasian-female-old = 0.0
@@ -134,4 +126,3 @@ blend_shapes/caucasian-male-baby = 0.0
 blend_shapes/caucasian-male-child = 0.0
 blend_shapes/caucasian-male-old = 0.0
 blend_shapes/caucasian-male-young = 0.0
-surface_material_override/0 = ExtResource("2_15w32")
