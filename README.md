@@ -1,5 +1,6 @@
 # Humanizer
 convert MPFB2 to Godot4
+open the build_skeleton/skeleton_builder.tscn and change the age and gender values in the editor (dont run the scene)
 
 http://static.makehumancommunity.org/mpfb.html  
 http://www.makehumancommunity.org/  
