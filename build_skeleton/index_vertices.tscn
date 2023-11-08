@@ -1,0 +1,77 @@
+[gd_scene load_steps=5 format=3 uid="uid://di1jqelve0h4v"]
+
+[ext_resource type="ArrayMesh" uid="uid://ddvwoojw6m8tr" path="res://human_model/human.res" id="1_8eojy"]
+[ext_resource type="Material" uid="uid://bftlhe01ovpp8" path="res://human_model/hide_helpers_material.tres" id="2_roy63"]
+[ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human.res" id="3_juued"]
+
+[sub_resource type="GDScript" id="GDScript_0cfxk"]
+script/source = "extends Node3D
+
+@onready var import_vertices = $Import_Human.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+@onready var shaded_vertices = $Shaded_Human.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+var b2g_index = []
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var unique_vertices = {}
+	for v in import_vertices.size():
+		var coords = import_vertices[v]
+		unique_vertices[coords] = []
+	for v in shaded_vertices.size():
+		var coords = shaded_vertices[v]
+		unique_vertices[coords].append(v)
+	for v in unique_vertices:
+		b2g_index.append(unique_vertices[v])
+	save_json(\"res://build_skeleton/b2g_index.json\",b2g_index)
+
+func save_json(file_path, data):
+	var file = FileAccess.open(file_path, FileAccess.WRITE)
+	file.store_line(JSON.stringify(data))
+"
+
+[node name="index_vertices" type="Node3D"]
+script = SubResource("GDScript_0cfxk")
+
+[node name="Import_Human" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+mesh = ExtResource("1_8eojy")
+blend_shapes/$md-$af-$fe-$yn = 0.0
+blend_shapes/$md-$af-$ma-$yn = 0.0
+blend_shapes/$md-$as-$fe-$yn = 0.0
+blend_shapes/$md-$as-$ma-$yn = 0.0
+blend_shapes/$md-$ca-$fe-$yn = 0.0
+blend_shapes/$md-$ca-$ma-$yn = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-$avcup-max$fi = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-maxcup-$av$fi = 0.0
+blend_shapes/$md-universal-$fe-$yn-$av$mu-$av$wg = 0.0
+blend_shapes/$md-universal-$ma-$yn-$av$mu-$av$wg = 0.0
+surface_material_override/0 = ExtResource("2_roy63")
+
+[node name="Shaded_Human" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+mesh = ExtResource("3_juued")
+blend_shapes/african-female-baby = 0.0
+blend_shapes/african-female-child = 0.0
+blend_shapes/african-female-old = 0.0
+blend_shapes/african-female-young = 0.0
+blend_shapes/african-male-baby = 0.0
+blend_shapes/african-male-child = 0.0
+blend_shapes/african-male-old = 0.0
+blend_shapes/african-male-young = 0.0
+blend_shapes/asian-female-baby = 0.0
+blend_shapes/asian-female-child = 0.0
+blend_shapes/asian-female-old = 0.0
+blend_shapes/asian-female-young = 0.0
+blend_shapes/asian-male-baby = 0.0
+blend_shapes/asian-male-child = 0.0
+blend_shapes/asian-male-old = 0.0
+blend_shapes/asian-male-young = 0.0
+blend_shapes/caucasian-female-baby = 0.0
+blend_shapes/caucasian-female-child = 0.0
+blend_shapes/caucasian-female-old = 0.0
+blend_shapes/caucasian-female-young = 0.0
+blend_shapes/caucasian-male-baby = 0.0
+blend_shapes/caucasian-male-child = 0.0
+blend_shapes/caucasian-male-old = 0.0
+blend_shapes/caucasian-male-young = 0.0
+surface_material_override/0 = ExtResource("2_roy63")

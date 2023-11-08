@@ -126,3 +126,4 @@ blend_shapes/caucasian-male-baby = 0.0
 blend_shapes/caucasian-male-child = 0.0
 blend_shapes/caucasian-male-old = 0.0
 blend_shapes/caucasian-male-young = 0.0
+surface_material_override/0 = ExtResource("2_15w32")
