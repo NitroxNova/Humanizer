@@ -1,0 +1,15 @@
+[gd_resource type="StandardMaterial3D" load_steps=4 format=3 uid="uid://bwxmbx6hdg3e1"]
+
+[ext_resource type="Texture2D" uid="uid://c1egnw8vvnufa" path="res://clothes_gen/female_casualsuit02/female_casualsuit02_diffuse.png" id="1_2ofa6"]
+[ext_resource type="Texture2D" uid="uid://df8midxo82o7m" path="res://clothes_gen/female_casualsuit02/female_casualsuit02_ao.png" id="2_fojcc"]
+[ext_resource type="Texture2D" uid="uid://du76w3b7axov0" path="res://clothes_gen/female_casualsuit02/female_casualsuit02_normal.png" id="3_7ccug"]
+
+[resource]
+cull_mode = 2
+albedo_texture = ExtResource("1_2ofa6")
+normal_enabled = true
+normal_texture = ExtResource("3_7ccug")
+ao_enabled = true
+ao_texture = ExtResource("2_fojcc")
+grow = true
+grow_amount = 0.01

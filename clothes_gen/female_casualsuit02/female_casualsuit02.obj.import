@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ckv036tljytvq"
+path="res://.godot/imported/female_casualsuit02.obj-51d371e61c80ecc92d1b125fc1828823.mesh"
+
+[deps]
+
+files=["res://.godot/imported/female_casualsuit02.obj-51d371e61c80ecc92d1b125fc1828823.mesh"]
+
+source_file="res://clothes_gen/female_casualsuit02/female_casualsuit02.obj"
+dest_files=["res://.godot/imported/female_casualsuit02.obj-51d371e61c80ecc92d1b125fc1828823.mesh", "res://.godot/imported/female_casualsuit02.obj-51d371e61c80ecc92d1b125fc1828823.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
