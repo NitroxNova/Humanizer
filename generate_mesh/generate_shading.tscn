@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://52ixd4kddggs"]
 
-[ext_resource type="ArrayMesh" path="res://generate_mesh/human_unshaded.res" id="1_i23o3"]
+[ext_resource type="ArrayMesh" uid="uid://cmnflqt2m28hy" path="res://generate_mesh/human_unshaded.res" id="1_i23o3"]
 [ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human.res" id="3_3mpt7"]
 
 [sub_resource type="GDScript" id="GDScript_kec1h"]
@@ -95,3 +95,27 @@ blend_shapes/caucasian-male-young = 0.0
 [node name="Shaded_Human" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47491, 0, 0)
 mesh = ExtResource("3_3mpt7")
+blend_shapes/african-female-baby = 0.0
+blend_shapes/african-female-child = 0.0
+blend_shapes/african-female-old = 0.0
+blend_shapes/african-female-young = 0.0
+blend_shapes/african-male-baby = 0.0
+blend_shapes/african-male-child = 0.0
+blend_shapes/african-male-old = 0.0
+blend_shapes/african-male-young = 0.0
+blend_shapes/asian-female-baby = 0.0
+blend_shapes/asian-female-child = 0.0
+blend_shapes/asian-female-old = 0.0
+blend_shapes/asian-female-young = 0.0
+blend_shapes/asian-male-baby = 0.0
+blend_shapes/asian-male-child = 0.0
+blend_shapes/asian-male-old = 0.0
+blend_shapes/asian-male-young = 0.0
+blend_shapes/caucasian-female-baby = 0.0
+blend_shapes/caucasian-female-child = 0.0
+blend_shapes/caucasian-female-old = 0.0
+blend_shapes/caucasian-female-young = 0.0
+blend_shapes/caucasian-male-baby = 0.0
+blend_shapes/caucasian-male-child = 0.0
+blend_shapes/caucasian-male-old = 0.0
+blend_shapes/caucasian-male-young = 0.0
