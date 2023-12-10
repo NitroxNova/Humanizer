@@ -1,7 +1,7 @@
 # Humanizer
 convert MPFB2 to Godot4  
-open the clothes_gen/make_clothes.tscn and change the age and gender values in the editor (dont run the scene)  
-latest devlog - https://youtu.be/4uD0alJNUpI   
+open the clothes_gen/clothes_demo.tscn and change the age and gender values in the editor (dont run the scene)  
+latest devlog - https://youtu.be/IlnVzeejoe8   
 
 Resources:  
 http://static.makehumancommunity.org/mpfb.html  
