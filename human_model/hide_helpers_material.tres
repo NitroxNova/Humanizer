@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://b71clkjf23dvp" path="res://human_model/hide_helpers.png" id="1_4h4vg"]
 
 [resource]
-transparency = 1
 depth_draw_mode = 1
-albedo_color = Color(1, 0.415686, 0.054902, 1)
+albedo_color = Color(0, 0.835294, 0.203922, 1)
 albedo_texture = ExtResource("1_4h4vg")
