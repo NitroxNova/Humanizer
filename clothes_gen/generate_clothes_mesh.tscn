@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=3 uid="uid://7pvmoo6bl36j"]
+
+[sub_resource type="GDScript" id="GDScript_sufwu"]
+script/source = "extends Node3D
+
+@export var clothes_name = \"female_casualsuit02\"
+var shapekey_data = load_shapekey_data()
+var new_mesh = ArrayMesh.new()
+var vertex_array
+var blend_arrays = []
+var mhclo : MHCLO_Reader
+var clothes_b2g_index
+var shaded_mesh = ArrayMesh.new()
+var ST = SurfaceTool.new()
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var folder = \"res://clothes_gen/\"
+	var mesh = load(folder + clothes_name + \"/import_mesh.res\")
+	var surface_arrays = mesh.surface_get_arrays(0)
+	vertex_array = surface_arrays[Mesh.ARRAY_VERTEX]
+	clothes_b2g_index = Utils.create_unique_index(vertex_array)
+	surface_arrays[Mesh.ARRAY_NORMAL] = null
+	surface_arrays[Mesh.ARRAY_TANGENT] = null
+	new_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
+	mhclo = MHCLO_Reader.new(folder + clothes_name + \"/\" + clothes_name + \".mhclo\")
+	for shape_name in shapekey_data.shape_keys:
+		process_shapekey(shape_name)
+	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface_arrays,blend_arrays)
+	make_shaded_mesh()
+	var material = load(folder + clothes_name + \"/material.tres\")
+	shaded_mesh.surface_set_material(0,material)
+	ResourceSaver.save(shaded_mesh,folder + clothes_name + \"/mesh.res\")
+
+func make_shaded_mesh():
+	blend_arrays = []
+	shaded_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
+	ST.create_from(new_mesh,0)
+	ST.generate_normals()
+	ST.generate_tangents()
+	var surface_arrays = ST.commit_to_arrays()
+	for shape_name in shapekey_data.shape_keys:
+		process_blend_shape_shading(shape_name)
+	shaded_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface_arrays,blend_arrays)
+	
+func process_blend_shape_shading(shape_name:String):
+	ST.clear()
+	ST.create_from_blend_shape(new_mesh,0,shape_name)
+	ST.generate_normals()
+	ST.generate_tangents()
+#	ST.commit(new_mesh)
+	var commit_array = ST.commit_to_arrays()
+	shaded_mesh.add_blend_shape(shape_name)
+	var curr_bs = []
+	curr_bs.resize(Mesh.ARRAY_MAX)
+	curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
+	curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
+	curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
+	#print(commit_array[Mesh.ARRAY_VERTEX].size())
+	blend_arrays.append(curr_bs)
+	
+func load_shapekey_data():
+	var data = Utils.read_json(\"res://generate_mesh/shapekey_data.json\")
+	for i in data.basis.size():
+		data.basis[i] = Utils.array_to_vector3(data.basis[i])
+	for shape_name in data.shape_keys:
+		for i in data.shape_keys[shape_name]:
+			data.shape_keys[shape_name][i] = Utils.array_to_vector3(data.shape_keys[shape_name][i])
+	return data
+	
+func process_shapekey(shape_name:String):
+	new_mesh.add_blend_shape(shape_name)
+	print(shape_name)
+	var shape_data = shapekey_data.shape_keys[shape_name]
+	var new_shape = []
+	new_shape.resize(Mesh.ARRAY_MAX)
+	new_shape[Mesh.ARRAY_VERTEX] = vertex_array.duplicate()
+	for b_index in mhclo.vertex_data.size():
+		var v_data = mhclo.vertex_data[b_index]
+		var coords = Vector3.ZERO
+		for i in 3:
+			var v_index = v_data[i]
+			var weight = v_data[i+3]
+			if str(v_index) in shape_data:
+				coords += shape_data[str(v_index)] * weight
+			else:
+				coords += shapekey_data.basis[v_index] * weight
+		var offset = Vector3(v_data[6],v_data[7],v_data[8]) * 0.10000000149011612
+		coords += offset
+		var g_array = clothes_b2g_index[b_index]
+		for g_index in g_array:
+			new_shape[Mesh.ARRAY_VERTEX][g_index] = coords
+	blend_arrays.append(new_shape)
+"
+
+[node name="generate_clothes_mesh" type="Node3D"]
+script = SubResource("GDScript_sufwu")
+clothes_name = "high-poly_eyes"

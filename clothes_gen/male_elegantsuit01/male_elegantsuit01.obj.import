@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cq3yyuuifviq1"
+path="res://.godot/imported/male_elegantsuit01.obj-3bfd9cee81f7c7cf9d0da0897146760e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/male_elegantsuit01.obj-3bfd9cee81f7c7cf9d0da0897146760e.mesh"]
+
+source_file="res://clothes_gen/male_elegantsuit01/male_elegantsuit01.obj"
+dest_files=["res://.godot/imported/male_elegantsuit01.obj-3bfd9cee81f7c7cf9d0da0897146760e.mesh", "res://.godot/imported/male_elegantsuit01.obj-3bfd9cee81f7c7cf9d0da0897146760e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false
