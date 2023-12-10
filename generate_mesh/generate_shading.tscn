@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://52ixd4kddggs"]
 
 [ext_resource type="ArrayMesh" uid="uid://cmnflqt2m28hy" path="res://generate_mesh/human_unshaded.res" id="1_i23o3"]
-[ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human.res" id="3_3mpt7"]
+[ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human_shaded.res" id="3_3mpt7"]
 
 [sub_resource type="GDScript" id="GDScript_kec1h"]
 script/source = "extends Node3D
@@ -18,7 +18,7 @@ func _ready():
 	for bs_index in $Unshaded_Human.get_blend_shape_count():
 		process_shape_key(bs_index)
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays,blend_shapes)
-	ResourceSaver.save(new_mesh,\"res://generate_mesh/human.res\")
+	ResourceSaver.save(new_mesh,\"res://generate_mesh/shaded_human.res\")
 	
 func make_basis():
 	var surface_arrays = $Unshaded_Human.mesh.surface_get_arrays(0)
@@ -57,7 +57,7 @@ func process_shape_key(bs_index):
 	curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
 	curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
 	curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
-	print(commit_array[Mesh.ARRAY_VERTEX].size())
+	#print(commit_array[Mesh.ARRAY_VERTEX].size())
 	blend_shapes.append(curr_bs)
 	ST.clear()
 "
@@ -91,6 +91,8 @@ blend_shapes/caucasian-male-baby = 0.0
 blend_shapes/caucasian-male-child = 0.0
 blend_shapes/caucasian-male-old = 0.0
 blend_shapes/caucasian-male-young = 0.0
+blend_shapes/l-ear-lobe-decr = 0.0
+blend_shapes/nose-curve-convex = 0.0
 
 [node name="Shaded_Human" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47491, 0, 0)
@@ -119,3 +121,5 @@ blend_shapes/caucasian-male-baby = 0.0
 blend_shapes/caucasian-male-child = 0.0
 blend_shapes/caucasian-male-old = 0.0
 blend_shapes/caucasian-male-young = 0.0
+blend_shapes/l-ear-lobe-decr = 0.0
+blend_shapes/nose-curve-convex = 0.0

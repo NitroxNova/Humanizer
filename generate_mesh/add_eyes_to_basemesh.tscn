@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxjruu2xlf66s"]
+
+[ext_resource type="ArrayMesh" uid="uid://btx1ccsb15vgf" path="res://generate_mesh/human_shaded.res" id="1_cvexe"]
+[ext_resource type="ArrayMesh" path="res://clothes_gen/high-poly_eyes/mesh.res" id="2_vh4l0"]
+
+[sub_resource type="GDScript" id="GDScript_dgjui"]
+script/source = "extends Node3D
+
+func _ready():
+	var new_mesh = ArrayMesh.new()
+	new_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
+	for shape_id in $HumanShaded.get_blend_shape_count():
+		var shape_name = $HumanShaded.mesh.get_blend_shape_name(shape_id)
+		new_mesh.add_blend_shape(shape_name)
+	for child_id in get_child_count():
+		var child = get_child(child_id)
+		var surface_arrays = child.mesh.surface_get_arrays(0)
+		var blend_shape_arrays = child.mesh.surface_get_blend_shape_arrays(0)
+		new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface_arrays,blend_shape_arrays)
+		new_mesh.surface_set_material(child_id,child.mesh.surface_get_material(0))
+	ResourceSaver.save(new_mesh,\"res://generate_mesh/human.res\")
+"
+
+[node name="add_eyes_to_basemesh" type="Node3D"]
+script = SubResource("GDScript_dgjui")
+
+[node name="HumanShaded" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_cvexe")
+blend_shapes/african-female-baby = 0.0
+blend_shapes/african-female-child = 0.0
+blend_shapes/african-female-old = 0.0
+blend_shapes/african-female-young = 0.0
+blend_shapes/african-male-baby = 0.0
+blend_shapes/african-male-child = 0.0
+blend_shapes/african-male-old = 0.0
+blend_shapes/african-male-young = 0.0
+blend_shapes/asian-female-baby = 0.0
+blend_shapes/asian-female-child = 0.0
+blend_shapes/asian-female-old = 0.0
+blend_shapes/asian-female-young = 0.0
+blend_shapes/asian-male-baby = 0.0
+blend_shapes/asian-male-child = 0.0
+blend_shapes/asian-male-old = 0.0
+blend_shapes/asian-male-young = 0.0
+blend_shapes/caucasian-female-baby = 0.0
+blend_shapes/caucasian-female-child = 0.0
+blend_shapes/caucasian-female-old = 0.0
+blend_shapes/caucasian-female-young = 0.0
+blend_shapes/caucasian-male-baby = 0.0
+blend_shapes/caucasian-male-child = 0.0
+blend_shapes/caucasian-male-old = 0.0
+blend_shapes/caucasian-male-young = 0.0
+blend_shapes/l-ear-lobe-decr = 0.0
+blend_shapes/nose-curve-convex = 0.0
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_vh4l0")
+blend_shapes/african-female-baby = 0.0
+blend_shapes/african-female-child = 0.0
+blend_shapes/african-female-old = 0.0
+blend_shapes/african-female-young = 0.0
+blend_shapes/african-male-baby = 0.0
+blend_shapes/african-male-child = 0.0
+blend_shapes/african-male-old = 0.0
+blend_shapes/african-male-young = 0.0
+blend_shapes/asian-female-baby = 0.0
+blend_shapes/asian-female-child = 0.0
+blend_shapes/asian-female-old = 0.0
+blend_shapes/asian-female-young = 0.0
+blend_shapes/asian-male-baby = 0.0
+blend_shapes/asian-male-child = 0.0
+blend_shapes/asian-male-old = 0.0
+blend_shapes/asian-male-young = 0.0
+blend_shapes/caucasian-female-baby = 0.0
+blend_shapes/caucasian-female-child = 0.0
+blend_shapes/caucasian-female-old = 0.0
+blend_shapes/caucasian-female-young = 0.0
+blend_shapes/caucasian-male-baby = 0.0
+blend_shapes/caucasian-male-child = 0.0
+blend_shapes/caucasian-male-old = 0.0
+blend_shapes/caucasian-male-young = 0.0
+blend_shapes/l-ear-lobe-decr = 0.0
+blend_shapes/nose-curve-convex = 0.0

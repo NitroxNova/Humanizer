@@ -1,0 +1,115 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1bd130pqvpgd"]
+
+[ext_resource type="ArrayMesh" uid="uid://ddvwoojw6m8tr" path="res://human_model/human.res" id="1_5m8e3"]
+[ext_resource type="ArrayMesh" uid="uid://cmnflqt2m28hy" path="res://generate_mesh/human_unshaded.res" id="3_8ilnl"]
+[ext_resource type="ArrayMesh" uid="uid://cv7ujxlrjufuu" path="res://human_model/helpers.res" id="3_8u1sg"]
+
+[sub_resource type="GDScript" id="GDScript_nakm0"]
+script/source = "extends Node3D
+
+@onready var mesh_arrays = $Import_Mesh.mesh.surface_get_arrays(0)
+@onready var human_vertex = mesh_arrays[Mesh.ARRAY_VERTEX]
+@onready var helper_arrays = $Helper_Mesh.mesh.surface_get_arrays(0)
+@onready var helper_vertex = helper_arrays[Mesh.ARRAY_VERTEX]
+var shapekey_data = Utils.read_json(\"res://generate_mesh/shapekey_data.json\")
+
+var new_mesh = ArrayMesh.new()
+var blend_arrays = []
+var b2g_index = []
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	index_vertices()
+	for shape_name in shapekey_data.shape_keys:
+		process_shapekey(shape_name)
+	make_mesh()
+	
+func index_vertices():
+	var unique_vertices = {}
+	for v in helper_vertex.size():
+		var coords = helper_vertex[v]
+		unique_vertices[coords] = []
+	for v in human_vertex.size():
+		var coords = human_vertex[v]
+		unique_vertices[coords].append(v)
+	for v in unique_vertices:
+		b2g_index.append(unique_vertices[v])
+
+func make_mesh():
+	new_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
+	mesh_arrays[Mesh.ARRAY_NORMAL] = null
+	mesh_arrays[Mesh.ARRAY_TANGENT] = null
+	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays, blend_arrays)
+#	new_mesh.regen_normal_maps()
+	ResourceSaver.save(new_mesh,\"res://generate_mesh/human_unshaded.res\")
+
+func process_shapekey(shape_name:String):
+	new_mesh.add_blend_shape(shape_name)
+	print(shape_name)
+	var shape_data = shapekey_data.shape_keys[shape_name]
+	var new_shape = []
+	new_shape.resize(Mesh.ARRAY_MAX)
+	new_shape[Mesh.ARRAY_VERTEX] = human_vertex.duplicate()
+	for b_index in shape_data:
+		var g_index = b2g_index[int(b_index)]
+		var coords = shape_data[b_index]
+		for i in g_index:
+			new_shape[Mesh.ARRAY_VERTEX][i] = Utils.array_to_vector3(coords)
+	blend_arrays.append(new_shape)
+
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_83mrt"]
+cull_mode = 2
+
+[node name="generate_mesh" type="Node3D"]
+script = SubResource("GDScript_nakm0")
+
+[node name="Import_Mesh" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_5m8e3")
+skeleton = NodePath("")
+
+[node name="Export_Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6909, 0, -0.0549458)
+mesh = ExtResource("3_8ilnl")
+blend_shapes/african-female-baby = 0.0
+blend_shapes/african-female-child = 0.0
+blend_shapes/african-female-old = 0.0
+blend_shapes/african-female-young = 0.0
+blend_shapes/african-male-baby = 0.0
+blend_shapes/african-male-child = 0.0
+blend_shapes/african-male-old = 0.0
+blend_shapes/african-male-young = 0.0
+blend_shapes/asian-female-baby = 0.0
+blend_shapes/asian-female-child = 0.0
+blend_shapes/asian-female-old = 0.0
+blend_shapes/asian-female-young = 0.0
+blend_shapes/asian-male-baby = 0.0
+blend_shapes/asian-male-child = 0.0
+blend_shapes/asian-male-old = 0.0
+blend_shapes/asian-male-young = 0.0
+blend_shapes/caucasian-female-baby = 0.0
+blend_shapes/caucasian-female-child = 0.0
+blend_shapes/caucasian-female-old = 0.0
+blend_shapes/caucasian-female-young = 0.0
+blend_shapes/caucasian-male-baby = 0.0
+blend_shapes/caucasian-male-child = 0.0
+blend_shapes/caucasian-male-old = 0.0
+blend_shapes/caucasian-male-young = 0.0
+blend_shapes/l-ear-lobe-decr = 0.0
+blend_shapes/nose-curve-convex = 0.0
+
+[node name="Helper_Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.64421, 0, 0.15162)
+mesh = ExtResource("3_8u1sg")
+blend_shapes/$md-$af-$fe-$yn = 0.0
+blend_shapes/$md-$af-$ma-$yn = 0.0
+blend_shapes/$md-$as-$fe-$yn = 0.0
+blend_shapes/$md-$as-$ma-$yn = 0.0
+blend_shapes/$md-$ca-$fe-$yn = 0.0
+blend_shapes/$md-$ca-$ma-$yn = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-$avcup-max$fi = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-maxcup-$av$fi = 0.0
+blend_shapes/$md-universal-$fe-$yn-$av$mu-$av$wg = 0.0
+blend_shapes/$md-universal-$ma-$yn-$av$mu-$av$wg = 0.0
+surface_material_override/0 = SubResource("StandardMaterial3D_83mrt")
