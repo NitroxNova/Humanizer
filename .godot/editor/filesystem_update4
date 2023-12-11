@@ -1,0 +1,11 @@
+res://clothes_gen/male_casualsuit04/import_mesh.res
+res://clothes_gen/female_elegantsuit01/import_mesh.res
+res://clothes_gen/high-poly_eyes/import_mesh.res
+res://clothes_gen/male_elegantsuit01/import_mesh.res
+res://human_model/helpers.res
+res://human_model/human.res
+res://clothes_gen/female_casualsuit02/import_mesh.res
+res://generate_mesh/generate_shading.tscn
+res://generate_mesh/add_eyes_to_basemesh.tscn
+res://clothes_gen/clothes_demo.tscn
+res://generate_mesh/human.res
