@@ -18,15 +18,30 @@ func _ready():
 	for bs_index in $Unshaded_Human.get_blend_shape_count():
 		process_shape_key(bs_index)
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays,blend_shapes)
-	ResourceSaver.save(new_mesh,\"res://generate_mesh/shaded_human.res\")
+	ResourceSaver.save(new_mesh,\"res://generate_mesh/human_shaded.res\")
 	
 func make_basis():
 	var surface_arrays = $Unshaded_Human.mesh.surface_get_arrays(0)
+	print(surface_arrays[Mesh.ARRAY_BONES].size())
 	ST.clear()
-	ST.create_from($Unshaded_Human.mesh,0)
+	ST.set_skin_weight_count(SurfaceTool.SKIN_8_WEIGHTS)
+	ST.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i in surface_arrays[Mesh.ARRAY_VERTEX].size():
+		var uv = surface_arrays[Mesh.ARRAY_TEX_UV][i]
+		ST.set_uv(uv)
+		var bones = surface_arrays[Mesh.ARRAY_BONES].slice(i*8,(i*8)+4)
+		ST.set_bones(bones)
+		var weights = surface_arrays[Mesh.ARRAY_WEIGHTS].slice(i*8,(i*8)+4)
+		ST.set_weights(weights)
+		var vertex = surface_arrays[Mesh.ARRAY_VERTEX][i]
+		ST.add_vertex(vertex)
+	for index in surface_arrays[Mesh.ARRAY_INDEX]:
+		ST.add_index(index)
 	ST.generate_normals()
 	ST.generate_tangents()
 	mesh_arrays = ST.commit_to_arrays()
+	print(mesh_arrays[Mesh.ARRAY_BONES].size())
+	print(ST.get_skin_weight_count())
 	ST.clear()
 
 func process_shape_key(bs_index):

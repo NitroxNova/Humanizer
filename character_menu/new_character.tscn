@@ -1,0 +1,183 @@
+[gd_scene load_steps=6 format=3 uid="uid://3jwf32o076uk"]
+
+[ext_resource type="PackedScene" uid="uid://dkfgfvcivevbl" path="res://character_menu/human_character.tscn" id="1_y8lm3"]
+
+[sub_resource type="GDScript" id="GDScript_07lg3"]
+script/source = "extends Control
+
+@onready var human = $Split_Screen/SubViewportContainer/SubViewport/Human
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	human.process_mode = Node.PROCESS_MODE_DISABLED
+	human.gender = Human_Character.GENDER.male
+	human.age = 25
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _on_skin_color_changed(color):
+	human.set_skin_color(color)
+
+
+func _on_age_slider_value_changed(value):
+	$Split_Screen/Menu/age_label.text = \"Age - \" + str(value)
+	human.age = value
+
+func change_clothes():
+	var clothes_option = $Split_Screen/Menu/Outfit_OptionButton.selected
+	if clothes_option == 0:
+		if human.gender == human.GENDER.male:
+			human.set_clothes(load(\"res://clothes_gen/male_casualsuit04/mesh.res\"))
+		else:
+			human.set_clothes(load(\"res://clothes_gen/female_casualsuit02/mesh.res\"))
+	elif clothes_option == 1:
+		if human.gender == human.GENDER.male:
+			human.set_clothes(load(\"res://clothes_gen/male_elegantsuit01/mesh.res\"))
+		else:
+			human.set_clothes(load(\"res://clothes_gen/female_elegantsuit01/mesh.res\"))
+	
+func _on_gender_selected(index):
+	if index == 0:
+		human.gender = Human_Character.GENDER.male
+	else:
+		human.gender = Human_Character.GENDER.female
+	change_clothes()
+	
+func _on_outfit_selected(index):
+	change_clothes()
+
+
+func _on_race_selected(index):
+	if index == 0:
+		human.race = human.RACE.caucasian
+	elif index == 1:
+		human.race = human.RACE.asian
+	elif index == 2:
+		human.race = human.RACE.african
+"
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0ku8n"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_8jahg"]
+sky_material = SubResource("ProceduralSkyMaterial_0ku8n")
+
+[sub_resource type="Environment" id="Environment_ukgrs"]
+background_mode = 2
+sky = SubResource("Sky_8jahg")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="New_Character" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_07lg3")
+
+[node name="Split_Screen" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Split_Screen"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "New Character"
+
+[node name="skin_color_label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "Skin Color"
+
+[node name="skin_ColorPickerButton" type="ColorPickerButton" parent="Split_Screen/Menu"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="gender_label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "Gender"
+
+[node name="gender_OptionButton" type="OptionButton" parent="Split_Screen/Menu"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Male"
+popup/item_0/id = 0
+popup/item_1/text = "Female"
+popup/item_1/id = 1
+
+[node name="age_label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "Age - 25"
+
+[node name="Age_Slider" type="HSlider" parent="Split_Screen/Menu"]
+layout_mode = 2
+value = 25.0
+
+[node name="outfit_label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "Outfit"
+
+[node name="Outfit_OptionButton" type="OptionButton" parent="Split_Screen/Menu"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Casual"
+popup/item_0/id = 0
+popup/item_1/text = "Fancy"
+popup/item_1/id = 1
+
+[node name="Race_label" type="Label" parent="Split_Screen/Menu"]
+layout_mode = 2
+text = "Race"
+
+[node name="Race_OptionButton" type="OptionButton" parent="Split_Screen/Menu"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Caucasian"
+popup/item_0/id = 0
+popup/item_1/text = "Asian"
+popup/item_1/id = 1
+popup/item_2/text = "African"
+popup/item_2/id = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Split_Screen"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Split_Screen/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1024, 648)
+render_target_update_mode = 4
+
+[node name="Human" parent="Split_Screen/SubViewportContainer/SubViewport" instance=ExtResource("1_y8lm3")]
+
+[node name="Camera3D" type="Camera3D" parent="Split_Screen/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82843, 1.49222)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Split_Screen/SubViewportContainer/SubViewport"]
+environment = SubResource("Environment_ukgrs")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Split_Screen/SubViewportContainer/SubViewport"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[connection signal="color_changed" from="Split_Screen/Menu/skin_ColorPickerButton" to="." method="_on_skin_color_changed"]
+[connection signal="item_selected" from="Split_Screen/Menu/gender_OptionButton" to="." method="_on_gender_selected"]
+[connection signal="value_changed" from="Split_Screen/Menu/Age_Slider" to="." method="_on_age_slider_value_changed"]
+[connection signal="item_selected" from="Split_Screen/Menu/Outfit_OptionButton" to="." method="_on_outfit_selected"]
+[connection signal="item_selected" from="Split_Screen/Menu/Race_OptionButton" to="." method="_on_race_selected"]

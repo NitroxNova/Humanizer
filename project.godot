@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="Humanizer"
+run/main_scene="res://character_menu/new_character.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
