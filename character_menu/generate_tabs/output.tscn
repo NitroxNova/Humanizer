@@ -1,0 +1,3309 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl8p7b1da8tnm"]
+
+[sub_resource type="GDScript" id="GDScript_egyil"]
+script/source = "extends TabContainer
+
+signal slider_changed(value,sk_name)
+signal skin_color_changed(color:Color)
+signal gender_changed(gender:String)
+signal age_changed(age:float)
+signal outfit_changed(clothes_mesh:ArrayMesh)
+signal race_changed(race:String)
+
+func on_slider_changed(value,sk_name:String):
+	#print(sk_name + \" - \" + str(value))
+	slider_changed.emit(value,sk_name)
+
+
+func _on_skin_color_picker_button_color_changed(color):
+	skin_color_changed.emit(color)
+
+
+func _on_gender_option_button_item_selected(index):
+	if index == 0:
+		gender_changed.emit(Human_Character.GENDER.male)
+	else:
+		gender_changed.emit(Human_Character.GENDER.female)
+	change_clothes()
+
+
+func _on_age_slider_value_changed(value):
+	$Main/age_label.text = \"Age - \" + str(value)
+	age_changed.emit(value)
+
+
+func _on_outfit_option_button_item_selected(index):
+	change_clothes()
+	
+func change_clothes():
+	var clothes_option = $Main/Outfit_OptionButton.selected
+	var gender = $Main/gender_OptionButton.selected
+	if clothes_option == 0:
+		if gender == 0:
+			outfit_changed.emit(load(\"res://clothes_gen/male_casualsuit04/mesh.res\"))
+		else:
+			outfit_changed.emit(load(\"res://clothes_gen/female_casualsuit02/mesh.res\"))
+	elif clothes_option == 1:
+		if  gender == 0:
+			outfit_changed.emit(load(\"res://clothes_gen/male_elegantsuit01/mesh.res\"))
+		else:
+			outfit_changed.emit(load(\"res://clothes_gen/female_elegantsuit01/mesh.res\"))
+
+
+func _on_race_option_button_item_selected(index):
+	if index == 0:
+		race_changed.emit(Human_Character.RACE.caucasian)
+	elif index == 1:
+		race_changed.emit(Human_Character.RACE.asian)
+	elif index == 2:
+		race_changed.emit(Human_Character.RACE.african)
+"
+
+[node name="Menu" type="TabContainer"]
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+script = SubResource("GDScript_egyil")
+
+[node name="Main" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Main"]
+layout_mode = 2
+text = "New Character"
+
+[node name="skin_color_label" type="Label" parent="Main"]
+layout_mode = 2
+text = "Skin Color"
+
+[node name="skin_ColorPickerButton" type="ColorPickerButton" parent="Main"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="gender_label" type="Label" parent="Main"]
+layout_mode = 2
+text = "Gender"
+
+[node name="gender_OptionButton" type="OptionButton" parent="Main"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Male"
+popup/item_0/id = 0
+popup/item_1/text = "Female"
+popup/item_1/id = 1
+
+[node name="age_label" type="Label" parent="Main"]
+layout_mode = 2
+text = "Age - 25"
+
+[node name="Age_Slider" type="HSlider" parent="Main"]
+layout_mode = 2
+value = 25.0
+
+[node name="outfit_label" type="Label" parent="Main"]
+layout_mode = 2
+text = "Outfit"
+
+[node name="Outfit_OptionButton" type="OptionButton" parent="Main"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Casual"
+popup/item_0/id = 0
+popup/item_1/text = "Fancy"
+popup/item_1/id = 1
+
+[node name="Race_label" type="Label" parent="Main"]
+layout_mode = 2
+text = "Race"
+
+[node name="Race_OptionButton" type="OptionButton" parent="Main"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Caucasian"
+popup/item_0/id = 0
+popup/item_1/text = "Asian"
+popup/item_1/id = 1
+popup/item_2/text = "African"
+popup/item_2/id = 2
+
+[node name="hip" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="hip_vbox" type="VBoxContainer" parent="hip"]
+layout_mode = 2
+
+[node name="hip-trans-down_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-down"
+
+[node name="hip-trans-down_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-trans-up_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-up"
+
+[node name="hip-trans-up_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-vert-decr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-vert-decr"
+
+[node name="hip-scale-vert-decr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-depth-decr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-depth-decr"
+
+[node name="hip-scale-depth-decr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-waist-up_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-waist-up"
+
+[node name="hip-waist-up_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-horiz-decr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-horiz-decr"
+
+[node name="hip-scale-horiz-decr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-trans-forward_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-forward"
+
+[node name="hip-trans-forward_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-trans-backward_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-backward"
+
+[node name="hip-trans-backward_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-trans-out_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-out"
+
+[node name="hip-trans-out_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-waist-down_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-waist-down"
+
+[node name="hip-waist-down_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-depth-incr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-depth-incr"
+
+[node name="hip-scale-depth-incr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-horiz-incr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-horiz-incr"
+
+[node name="hip-scale-horiz-incr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-scale-vert-incr_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-scale-vert-incr"
+
+[node name="hip-scale-vert-incr_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hip-trans-in_label" type="Label" parent="hip/hip_vbox"]
+layout_mode = 2
+text = "hip-trans-in"
+
+[node name="hip-trans-in_slider" type="HSlider" parent="hip/hip_vbox"]
+layout_mode = 2
+
+[node name="hands" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="hands_vbox" type="VBoxContainer" parent="hands"]
+layout_mode = 2
+
+[node name="hand-fingers-diameter-incr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-diameter-incr"
+
+[node name="hand-fingers-diameter-incr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-fingers-length-decr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-length-decr"
+
+[node name="hand-fingers-length-decr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-trans-out_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-trans-out"
+
+[node name="hand-trans-out_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-trans-in_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-trans-in"
+
+[node name="hand-trans-in_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-fingers-distance-incr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-distance-incr"
+
+[node name="hand-fingers-distance-incr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="measure-wrist-circ-decr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "measure-wrist-circ-decr"
+
+[node name="measure-wrist-circ-decr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-fingers-diameter-decr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-diameter-decr"
+
+[node name="hand-fingers-diameter-decr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-scale-incr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-scale-incr"
+
+[node name="hand-scale-incr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-fingers-distance-decr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-distance-decr"
+
+[node name="hand-fingers-distance-decr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-fingers-length-incr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-fingers-length-incr"
+
+[node name="hand-fingers-length-incr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="hand-scale-decr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "hand-scale-decr"
+
+[node name="hand-scale-decr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="measure-wrist-circ-incr_label" type="Label" parent="hands/hands_vbox"]
+layout_mode = 2
+text = "measure-wrist-circ-incr"
+
+[node name="measure-wrist-circ-incr_slider" type="HSlider" parent="hands/hands_vbox"]
+layout_mode = 2
+
+[node name="buttocks" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="buttocks_vbox" type="VBoxContainer" parent="buttocks"]
+layout_mode = 2
+
+[node name="buttocks-volume-incr_label" type="Label" parent="buttocks/buttocks_vbox"]
+layout_mode = 2
+text = "buttocks-volume-incr"
+
+[node name="buttocks-volume-incr_slider" type="HSlider" parent="buttocks/buttocks_vbox"]
+layout_mode = 2
+
+[node name="buttocks-volume-decr_label" type="Label" parent="buttocks/buttocks_vbox"]
+layout_mode = 2
+text = "buttocks-volume-decr"
+
+[node name="buttocks-volume-decr_slider" type="HSlider" parent="buttocks/buttocks_vbox"]
+layout_mode = 2
+
+[node name="nose" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="nose_vbox" type="VBoxContainer" parent="nose"]
+layout_mode = 2
+
+[node name="nose-point-width-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-point-width-decr"
+
+[node name="nose-point-width-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width1-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width1-decr"
+
+[node name="nose-width1-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-septumangle-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-septumangle-decr"
+
+[node name="nose-septumangle-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-nostrils-width-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-nostrils-width-decr"
+
+[node name="nose-nostrils-width-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-volume-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-volume-decr"
+
+[node name="nose-volume-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-horiz-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-horiz-decr"
+
+[node name="nose-scale-horiz-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-volume-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-volume-incr"
+
+[node name="nose-volume-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width2-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width2-decr"
+
+[node name="nose-width2-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-base-up_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-base-up"
+
+[node name="nose-base-up_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-down_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-down"
+
+[node name="nose-trans-down_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-point-up_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-point-up"
+
+[node name="nose-point-up_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-hump-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-hump-decr"
+
+[node name="nose-hump-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-out_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-out"
+
+[node name="nose-trans-out_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-point-width-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-point-width-incr"
+
+[node name="nose-point-width-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-compression-uncompress_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-compression-uncompress"
+
+[node name="nose-compression-uncompress_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-vert-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-vert-decr"
+
+[node name="nose-scale-vert-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-greek-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-greek-incr"
+
+[node name="nose-greek-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-depth-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-depth-incr"
+
+[node name="nose-scale-depth-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-up_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-up"
+
+[node name="nose-trans-up_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-forward_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-forward"
+
+[node name="nose-trans-forward_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width1-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width1-incr"
+
+[node name="nose-width1-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-depth-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-depth-decr"
+
+[node name="nose-scale-depth-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-nostrils-angle-up_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-nostrils-angle-up"
+
+[node name="nose-nostrils-angle-up_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-curve-convex_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-curve-convex"
+
+[node name="nose-curve-convex_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-hump-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-hump-incr"
+
+[node name="nose-hump-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-flaring-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-flaring-incr"
+
+[node name="nose-flaring-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-nostrils-angle-down_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-nostrils-angle-down"
+
+[node name="nose-nostrils-angle-down_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-nostrils-width-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-nostrils-width-incr"
+
+[node name="nose-nostrils-width-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-vert-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-vert-incr"
+
+[node name="nose-scale-vert-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-curve-concave_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-curve-concave"
+
+[node name="nose-curve-concave_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-septumangle-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-septumangle-incr"
+
+[node name="nose-septumangle-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width3-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width3-decr"
+
+[node name="nose-width3-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-point-down_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-point-down"
+
+[node name="nose-point-down_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-compression-compress_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-compression-compress"
+
+[node name="nose-compression-compress_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-flaring-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-flaring-decr"
+
+[node name="nose-flaring-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-in_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-in"
+
+[node name="nose-trans-in_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-trans-backward_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-trans-backward"
+
+[node name="nose-trans-backward_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-base-down_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-base-down"
+
+[node name="nose-base-down_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width2-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width2-incr"
+
+[node name="nose-width2-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-width3-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-width3-incr"
+
+[node name="nose-width3-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-greek-decr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-greek-decr"
+
+[node name="nose-greek-decr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="nose-scale-horiz-incr_label" type="Label" parent="nose/nose_vbox"]
+layout_mode = 2
+text = "nose-scale-horiz-incr"
+
+[node name="nose-scale-horiz-incr_slider" type="HSlider" parent="nose/nose_vbox"]
+layout_mode = 2
+
+[node name="mouth" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="mouth_vbox" type="VBoxContainer" parent="mouth"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-volume-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-volume-incr"
+
+[node name="mouth-lowerlip-volume-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-middle-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-middle-down"
+
+[node name="mouth-lowerlip-middle-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-out_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-out"
+
+[node name="mouth-trans-out_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-vert-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-vert-decr"
+
+[node name="mouth-scale-vert-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-vert-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-vert-incr"
+
+[node name="mouth-scale-vert-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-angles-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-angles-up"
+
+[node name="mouth-angles-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-in_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-in"
+
+[node name="mouth-trans-in_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-philtrum-volume-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-philtrum-volume-incr"
+
+[node name="mouth-philtrum-volume-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-width-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-width-incr"
+
+[node name="mouth-upperlip-width-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-depth-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-depth-incr"
+
+[node name="mouth-scale-depth-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-width-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-width-decr"
+
+[node name="mouth-lowerlip-width-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-cupidsbow-width-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-cupidsbow-width-incr"
+
+[node name="mouth-cupidsbow-width-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-backward_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-backward"
+
+[node name="mouth-trans-backward_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-volume-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-volume-incr"
+
+[node name="mouth-upperlip-volume-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-horiz-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-horiz-incr"
+
+[node name="mouth-scale-horiz-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-ext-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-ext-down"
+
+[node name="mouth-upperlip-ext-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-ext-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-ext-up"
+
+[node name="mouth-upperlip-ext-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-cupidsbow-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-cupidsbow-incr"
+
+[node name="mouth-cupidsbow-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-up"
+
+[node name="mouth-trans-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-laugh-lines-out_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-laugh-lines-out"
+
+[node name="mouth-laugh-lines-out_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-height-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-height-decr"
+
+[node name="mouth-upperlip-height-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-ext-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-ext-down"
+
+[node name="mouth-lowerlip-ext-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-middle-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-middle-up"
+
+[node name="mouth-upperlip-middle-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-middle-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-middle-up"
+
+[node name="mouth-lowerlip-middle-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-ext-up_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-ext-up"
+
+[node name="mouth-lowerlip-ext-up_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-dimples-out_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-dimples-out"
+
+[node name="mouth-dimples-out_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-dimples-in_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-dimples-in"
+
+[node name="mouth-dimples-in_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-philtrum-volume-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-philtrum-volume-decr"
+
+[node name="mouth-philtrum-volume-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-height-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-height-incr"
+
+[node name="mouth-upperlip-height-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-laugh-lines-in_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-laugh-lines-in"
+
+[node name="mouth-laugh-lines-in_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-cupidsbow-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-cupidsbow-decr"
+
+[node name="mouth-cupidsbow-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-horiz-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-horiz-decr"
+
+[node name="mouth-scale-horiz-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-width-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-width-incr"
+
+[node name="mouth-lowerlip-width-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-middle-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-middle-down"
+
+[node name="mouth-upperlip-middle-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-cupidsbow-width-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-cupidsbow-width-decr"
+
+[node name="mouth-cupidsbow-width-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-forward_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-forward"
+
+[node name="mouth-trans-forward_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-volume-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-volume-decr"
+
+[node name="mouth-upperlip-volume-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-angles-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-angles-down"
+
+[node name="mouth-angles-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-volume-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-volume-decr"
+
+[node name="mouth-lowerlip-volume-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-upperlip-width-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-upperlip-width-decr"
+
+[node name="mouth-upperlip-width-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-height-incr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-height-incr"
+
+[node name="mouth-lowerlip-height-incr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-lowerlip-height-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-lowerlip-height-decr"
+
+[node name="mouth-lowerlip-height-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-trans-down_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-trans-down"
+
+[node name="mouth-trans-down_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="mouth-scale-depth-decr_label" type="Label" parent="mouth/mouth_vbox"]
+layout_mode = 2
+text = "mouth-scale-depth-decr"
+
+[node name="mouth-scale-depth-decr_slider" type="HSlider" parent="mouth/mouth_vbox"]
+layout_mode = 2
+
+[node name="arms" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="arms_vbox" type="VBoxContainer" parent="arms"]
+layout_mode = 2
+
+[node name="lowerarm-scale-depth-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-depth-decr"
+
+[node name="lowerarm-scale-depth-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-fat-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-fat-incr"
+
+[node name="upperarm-fat-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-scale-vert-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-vert-incr"
+
+[node name="lowerarm-scale-vert-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-shoulder-muscle-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-shoulder-muscle-incr"
+
+[node name="upperarm-shoulder-muscle-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-scale-horiz-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-horiz-decr"
+
+[node name="lowerarm-scale-horiz-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-shoulder-muscle-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-shoulder-muscle-decr"
+
+[node name="upperarm-shoulder-muscle-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-upperarm-circ-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-upperarm-circ-decr"
+
+[node name="measure-upperarm-circ-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-muscle-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-muscle-incr"
+
+[node name="lowerarm-muscle-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-scale-horiz-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-horiz-incr"
+
+[node name="lowerarm-scale-horiz-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-upperarm-length-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-upperarm-length-decr"
+
+[node name="measure-upperarm-length-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-fat-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-fat-decr"
+
+[node name="lowerarm-fat-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-scale-vert-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-vert-decr"
+
+[node name="lowerarm-scale-vert-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-upperarm-length-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-upperarm-length-incr"
+
+[node name="measure-upperarm-length-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-depth-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-depth-incr"
+
+[node name="upperarm-scale-depth-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-vert-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-vert-incr"
+
+[node name="upperarm-scale-vert-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-scale-depth-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-scale-depth-incr"
+
+[node name="lowerarm-scale-depth-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-vert-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-vert-decr"
+
+[node name="upperarm-scale-vert-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-horiz-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-horiz-incr"
+
+[node name="upperarm-scale-horiz-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-muscle-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-muscle-decr"
+
+[node name="upperarm-muscle-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-fat-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-fat-incr"
+
+[node name="lowerarm-fat-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-lowerarm-length-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-lowerarm-length-incr"
+
+[node name="measure-lowerarm-length-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-upperarm-circ-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-upperarm-circ-incr"
+
+[node name="measure-upperarm-circ-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-fat-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-fat-decr"
+
+[node name="upperarm-fat-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="measure-lowerarm-length-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "measure-lowerarm-length-decr"
+
+[node name="measure-lowerarm-length-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-muscle-incr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-muscle-incr"
+
+[node name="upperarm-muscle-incr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-depth-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-depth-decr"
+
+[node name="upperarm-scale-depth-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="upperarm-scale-horiz-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "upperarm-scale-horiz-decr"
+
+[node name="upperarm-scale-horiz-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="lowerarm-muscle-decr_label" type="Label" parent="arms/arms_vbox"]
+layout_mode = 2
+text = "lowerarm-muscle-decr"
+
+[node name="lowerarm-muscle-decr_slider" type="HSlider" parent="arms/arms_vbox"]
+layout_mode = 2
+
+[node name="ears" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="ears_vbox" type="VBoxContainer" parent="ears"]
+layout_mode = 2
+
+[node name="ear-flap-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-flap-incr"
+
+[node name="ear-flap-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-shape-round_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-shape-round"
+
+[node name="ear-shape-round_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-wing-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-wing-incr"
+
+[node name="ear-wing-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-lobe-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-lobe-decr"
+
+[node name="ear-lobe-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-rot-backward_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-rot-backward"
+
+[node name="ear-rot-backward_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-shape-pointed_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-shape-pointed"
+
+[node name="ear-shape-pointed_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-shape-square_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-shape-square"
+
+[node name="ear-shape-square_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-incr"
+
+[node name="ear-scale-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-vert-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-vert-decr"
+
+[node name="ear-scale-vert-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-trans-down_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-trans-down"
+
+[node name="ear-trans-down_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-shape-triangle_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-shape-triangle"
+
+[node name="ear-shape-triangle_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-trans-forward_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-trans-forward"
+
+[node name="ear-trans-forward_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-trans-up_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-trans-up"
+
+[node name="ear-trans-up_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-rot-forward_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-rot-forward"
+
+[node name="ear-rot-forward_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-decr"
+
+[node name="ear-scale-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-lobe-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-lobe-incr"
+
+[node name="ear-lobe-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-trans-backward_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-trans-backward"
+
+[node name="ear-trans-backward_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-depth-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-depth-decr"
+
+[node name="ear-scale-depth-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-vert-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-vert-incr"
+
+[node name="ear-scale-vert-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-wing-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-wing-decr"
+
+[node name="ear-wing-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-scale-depth-incr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-scale-depth-incr"
+
+[node name="ear-scale-depth-incr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="ear-flap-decr_label" type="Label" parent="ears/ears_vbox"]
+layout_mode = 2
+text = "ear-flap-decr"
+
+[node name="ear-flap-decr_slider" type="HSlider" parent="ears/ears_vbox"]
+layout_mode = 2
+
+[node name="pelvis" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="pelvis_vbox" type="VBoxContainer" parent="pelvis"]
+layout_mode = 2
+
+[node name="pelvis-tone-incr_label" type="Label" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+text = "pelvis-tone-incr"
+
+[node name="pelvis-tone-incr_slider" type="HSlider" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+
+[node name="bulge-decr_label" type="Label" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+text = "bulge-decr"
+
+[node name="bulge-decr_slider" type="HSlider" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+
+[node name="pelvis-tone-decr_label" type="Label" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+text = "pelvis-tone-decr"
+
+[node name="pelvis-tone-decr_slider" type="HSlider" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+
+[node name="bulge-incr_label" type="Label" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+text = "bulge-incr"
+
+[node name="bulge-incr_slider" type="HSlider" parent="pelvis/pelvis_vbox"]
+layout_mode = 2
+
+[node name="cheek" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="cheek_vbox" type="VBoxContainer" parent="cheek"]
+layout_mode = 2
+
+[node name="cheek-inner-decr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-inner-decr"
+
+[node name="cheek-inner-decr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-bones-incr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-bones-incr"
+
+[node name="cheek-bones-incr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-trans-down_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-trans-down"
+
+[node name="cheek-trans-down_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-volume-incr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-volume-incr"
+
+[node name="cheek-volume-incr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-inner-incr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-inner-incr"
+
+[node name="cheek-inner-incr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-bones-decr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-bones-decr"
+
+[node name="cheek-bones-decr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-trans-up_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-trans-up"
+
+[node name="cheek-trans-up_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="cheek-volume-decr_label" type="Label" parent="cheek/cheek_vbox"]
+layout_mode = 2
+text = "cheek-volume-decr"
+
+[node name="cheek-volume-decr_slider" type="HSlider" parent="cheek/cheek_vbox"]
+layout_mode = 2
+
+[node name="eyes" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="eyes_vbox" type="VBoxContainer" parent="eyes"]
+layout_mode = 2
+
+[node name="eye-height2-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height2-incr"
+
+[node name="eye-height2-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-push1-in_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-push1-in"
+
+[node name="eye-push1-in_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-convex_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-convex"
+
+[node name="eye-eyefold-convex_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-concave_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-concave"
+
+[node name="eye-eyefold-concave_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-epicanthus-out_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-epicanthus-out"
+
+[node name="eye-epicanthus-out_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-trans-down_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-trans-down"
+
+[node name="eye-trans-down_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-out_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-out"
+
+[node name="eye-bag-out_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-in_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-in"
+
+[node name="eye-bag-in_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-decr"
+
+[node name="eye-bag-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-angle-up_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-angle-up"
+
+[node name="eye-eyefold-angle-up_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-corner1-down_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-corner1-down"
+
+[node name="eye-corner1-down_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-down_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-down"
+
+[node name="eye-eyefold-down_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-trans-in_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-trans-in"
+
+[node name="eye-trans-in_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-push2-out_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-push2-out"
+
+[node name="eye-push2-out_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-trans-out_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-trans-out"
+
+[node name="eye-trans-out_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-up_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-up"
+
+[node name="eye-eyefold-up_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-height1-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height1-decr"
+
+[node name="eye-height1-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-corner2-down_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-corner2-down"
+
+[node name="eye-corner2-down_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-height2-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height2-decr"
+
+[node name="eye-height2-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-incr"
+
+[node name="eye-bag-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-eyefold-angle-down_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-eyefold-angle-down"
+
+[node name="eye-eyefold-angle-down_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-corner2-up_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-corner2-up"
+
+[node name="eye-corner2-up_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-scale-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-scale-decr"
+
+[node name="eye-scale-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-push1-out_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-push1-out"
+
+[node name="eye-push1-out_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-trans-up_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-trans-up"
+
+[node name="eye-trans-up_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-push2-in_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-push2-in"
+
+[node name="eye-push2-in_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-scale-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-scale-incr"
+
+[node name="eye-scale-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-height3-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height3-incr"
+
+[node name="eye-height3-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-height3-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height3-decr"
+
+[node name="eye-height3-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-height-decr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-height-decr"
+
+[node name="eye-bag-height-decr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-corner1-up_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-corner1-up"
+
+[node name="eye-corner1-up_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-epicanthus-in_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-epicanthus-in"
+
+[node name="eye-epicanthus-in_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-height1-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-height1-incr"
+
+[node name="eye-height1-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="eye-bag-height-incr_label" type="Label" parent="eyes/eyes_vbox"]
+layout_mode = 2
+text = "eye-bag-height-incr"
+
+[node name="eye-bag-height-incr_slider" type="HSlider" parent="eyes/eyes_vbox"]
+layout_mode = 2
+
+[node name="stomach" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="stomach_vbox" type="VBoxContainer" parent="stomach"]
+layout_mode = 2
+
+[node name="stomach-navel-out_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-navel-out"
+
+[node name="stomach-navel-out_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-tone-incr_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-tone-incr"
+
+[node name="stomach-tone-incr_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-pregnant-incr_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-pregnant-incr"
+
+[node name="stomach-pregnant-incr_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-tone-decr_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-tone-decr"
+
+[node name="stomach-tone-decr_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-pregnant-decr_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-pregnant-decr"
+
+[node name="stomach-pregnant-decr_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-navel-in_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-navel-in"
+
+[node name="stomach-navel-in_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-navel-down_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-navel-down"
+
+[node name="stomach-navel-down_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="stomach-navel-up_label" type="Label" parent="stomach/stomach_vbox"]
+layout_mode = 2
+text = "stomach-navel-up"
+
+[node name="stomach-navel-up_slider" type="HSlider" parent="stomach/stomach_vbox"]
+layout_mode = 2
+
+[node name="eyebrows" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="eyebrows_vbox" type="VBoxContainer" parent="eyebrows"]
+layout_mode = 2
+
+[node name="eyebrows-angle-down_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-angle-down"
+
+[node name="eyebrows-angle-down_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="eyebrows-trans-up_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-trans-up"
+
+[node name="eyebrows-trans-up_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="eyebrows-trans-forward_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-trans-forward"
+
+[node name="eyebrows-trans-forward_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="eyebrows-trans-down_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-trans-down"
+
+[node name="eyebrows-trans-down_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="eyebrows-trans-backward_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-trans-backward"
+
+[node name="eyebrows-trans-backward_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="eyebrows-angle-up_label" type="Label" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+text = "eyebrows-angle-up"
+
+[node name="eyebrows-angle-up_slider" type="HSlider" parent="eyebrows/eyebrows_vbox"]
+layout_mode = 2
+
+[node name="chin" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="chin_vbox" type="VBoxContainer" parent="chin"]
+layout_mode = 2
+
+[node name="chin-height-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-height-decr"
+
+[node name="chin-height-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-jaw-drop-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-jaw-drop-incr"
+
+[node name="chin-jaw-drop-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-bones-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-bones-decr"
+
+[node name="chin-bones-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-cleft-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-cleft-decr"
+
+[node name="chin-cleft-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-prognathism-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-prognathism-decr"
+
+[node name="chin-prognathism-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-prognathism-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-prognathism-incr"
+
+[node name="chin-prognathism-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-width-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-width-incr"
+
+[node name="chin-width-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-height-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-height-incr"
+
+[node name="chin-height-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-bones-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-bones-incr"
+
+[node name="chin-bones-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-cleft-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-cleft-incr"
+
+[node name="chin-cleft-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-triangle_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-triangle"
+
+[node name="chin-triangle_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-prominent-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-prominent-decr"
+
+[node name="chin-prominent-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-jaw-drop-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-jaw-drop-decr"
+
+[node name="chin-jaw-drop-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-prominent-incr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-prominent-incr"
+
+[node name="chin-prominent-incr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="chin-width-decr_label" type="Label" parent="chin/chin_vbox"]
+layout_mode = 2
+text = "chin-width-decr"
+
+[node name="chin-width-decr_slider" type="HSlider" parent="chin/chin_vbox"]
+layout_mode = 2
+
+[node name="head" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="head_vbox" type="VBoxContainer" parent="head"]
+layout_mode = 2
+
+[node name="head-scale-horiz-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-horiz-incr"
+
+[node name="head-scale-horiz-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-triangular_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-triangular"
+
+[node name="head-triangular_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-oval_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-oval"
+
+[node name="head-oval_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-round_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-round"
+
+[node name="head-round_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-in_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-in"
+
+[node name="head-trans-in_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-rectangular_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-rectangular"
+
+[node name="head-rectangular_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-angle-in_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-angle-in"
+
+[node name="head-angle-in_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-age-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-age-incr"
+
+[node name="head-age-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-back-scale-depth-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-back-scale-depth-decr"
+
+[node name="head-back-scale-depth-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-invertedtriangular_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-invertedtriangular"
+
+[node name="head-invertedtriangular_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-down_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-down"
+
+[node name="head-trans-down_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-scale-vert-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-vert-decr"
+
+[node name="head-scale-vert-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-up_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-up"
+
+[node name="head-trans-up_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-diamond_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-diamond"
+
+[node name="head-diamond_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-fat-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-fat-incr"
+
+[node name="head-fat-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-backward_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-backward"
+
+[node name="head-trans-backward_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-age-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-age-decr"
+
+[node name="head-age-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-scale-vert-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-vert-incr"
+
+[node name="head-scale-vert-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-scale-horiz-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-horiz-decr"
+
+[node name="head-scale-horiz-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-forward_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-forward"
+
+[node name="head-trans-forward_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-square_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-square"
+
+[node name="head-square_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-scale-depth-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-depth-decr"
+
+[node name="head-scale-depth-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-angle-out_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-angle-out"
+
+[node name="head-angle-out_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-fat-decr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-fat-decr"
+
+[node name="head-fat-decr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-back-scale-depth-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-back-scale-depth-incr"
+
+[node name="head-back-scale-depth-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-scale-depth-incr_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-scale-depth-incr"
+
+[node name="head-scale-depth-incr_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="head-trans-out_label" type="Label" parent="head/head_vbox"]
+layout_mode = 2
+text = "head-trans-out"
+
+[node name="head-trans-out_slider" type="HSlider" parent="head/head_vbox"]
+layout_mode = 2
+
+[node name="torso" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="torso_vbox" type="VBoxContainer" parent="torso"]
+layout_mode = 2
+
+[node name="measure-frontchest-dist-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-frontchest-dist-incr"
+
+[node name="measure-frontchest-dist-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-vert-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-vert-decr"
+
+[node name="torso-scale-vert-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-napetowaist-dist-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-napetowaist-dist-decr"
+
+[node name="measure-napetowaist-dist-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-bust-circ-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-bust-circ-decr"
+
+[node name="measure-bust-circ-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-bust-circ-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-bust-circ-incr"
+
+[node name="measure-bust-circ-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-backward_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-backward"
+
+[node name="torso-trans-backward_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-waist-circ-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-waist-circ-decr"
+
+[node name="measure-waist-circ-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-underbust-circ-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-underbust-circ-incr"
+
+[node name="measure-underbust-circ-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-horiz-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-horiz-incr"
+
+[node name="torso-scale-horiz-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-hips-circ-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-hips-circ-incr"
+
+[node name="measure-hips-circ-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-vshape-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-vshape-incr"
+
+[node name="torso-vshape-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-muscle-dorsi-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-muscle-dorsi-decr"
+
+[node name="torso-muscle-dorsi-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-muscle-pectoral-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-muscle-pectoral-decr"
+
+[node name="torso-muscle-pectoral-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-waisttohip-dist-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-waisttohip-dist-incr"
+
+[node name="measure-waisttohip-dist-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-napetowaist-dist-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-napetowaist-dist-incr"
+
+[node name="measure-napetowaist-dist-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-shoulder-dist-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-shoulder-dist-decr"
+
+[node name="measure-shoulder-dist-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-in_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-in"
+
+[node name="torso-trans-in_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-muscle-pectoral-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-muscle-pectoral-incr"
+
+[node name="torso-muscle-pectoral-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-depth-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-depth-incr"
+
+[node name="torso-scale-depth-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-vert-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-vert-incr"
+
+[node name="torso-scale-vert-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-up_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-up"
+
+[node name="torso-trans-up_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-muscle-dorsi-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-muscle-dorsi-incr"
+
+[node name="torso-muscle-dorsi-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-frontchest-dist-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-frontchest-dist-decr"
+
+[node name="measure-frontchest-dist-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-underbust-circ-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-underbust-circ-decr"
+
+[node name="measure-underbust-circ-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-shoulder-dist-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-shoulder-dist-incr"
+
+[node name="measure-shoulder-dist-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-hips-circ-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-hips-circ-decr"
+
+[node name="measure-hips-circ-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-waisttohip-dist-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-waisttohip-dist-decr"
+
+[node name="measure-waisttohip-dist-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="measure-waist-circ-incr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "measure-waist-circ-incr"
+
+[node name="measure-waist-circ-incr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-forward_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-forward"
+
+[node name="torso-trans-forward_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-depth-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-depth-decr"
+
+[node name="torso-scale-depth-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-scale-horiz-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-scale-horiz-decr"
+
+[node name="torso-scale-horiz-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-out_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-out"
+
+[node name="torso-trans-out_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-trans-down_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-trans-down"
+
+[node name="torso-trans-down_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="torso-vshape-decr_label" type="Label" parent="torso/torso_vbox"]
+layout_mode = 2
+text = "torso-vshape-decr"
+
+[node name="torso-vshape-decr_slider" type="HSlider" parent="torso/torso_vbox"]
+layout_mode = 2
+
+[node name="feet" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="feet_vbox" type="VBoxContainer" parent="feet"]
+layout_mode = 2
+
+[node name="foot-scale-incr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-incr"
+
+[node name="foot-scale-incr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-depth-decr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-depth-decr"
+
+[node name="foot-scale-depth-decr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-vert-incr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-vert-incr"
+
+[node name="foot-scale-vert-incr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-horiz-decr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-horiz-decr"
+
+[node name="foot-scale-horiz-decr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-in_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-in"
+
+[node name="foot-trans-in_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-down_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-down"
+
+[node name="foot-trans-down_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-decr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-decr"
+
+[node name="foot-scale-decr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-forward_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-forward"
+
+[node name="foot-trans-forward_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-horiz-incr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-horiz-incr"
+
+[node name="foot-scale-horiz-incr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="measure-ankle-circ-decr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "measure-ankle-circ-decr"
+
+[node name="measure-ankle-circ-decr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="measure-ankle-circ-incr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "measure-ankle-circ-incr"
+
+[node name="measure-ankle-circ-incr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-vert-decr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-vert-decr"
+
+[node name="foot-scale-vert-decr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-up_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-up"
+
+[node name="foot-trans-up_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-out_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-out"
+
+[node name="foot-trans-out_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-scale-depth-incr_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-scale-depth-incr"
+
+[node name="foot-scale-depth-incr_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="foot-trans-backward_label" type="Label" parent="feet/feet_vbox"]
+layout_mode = 2
+text = "foot-trans-backward"
+
+[node name="foot-trans-backward_slider" type="HSlider" parent="feet/feet_vbox"]
+layout_mode = 2
+
+[node name="neck" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="neck_vbox" type="VBoxContainer" parent="neck"]
+layout_mode = 2
+
+[node name="measure-neck-height-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "measure-neck-height-incr"
+
+[node name="measure-neck-height-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-in_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-in"
+
+[node name="neck-trans-in_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-double-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-double-incr"
+
+[node name="neck-double-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-vert-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-vert-decr"
+
+[node name="neck-scale-vert-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-vert-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-vert-incr"
+
+[node name="neck-scale-vert-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-up_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-up"
+
+[node name="neck-trans-up_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-back-scale-depth-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-back-scale-depth-incr"
+
+[node name="neck-back-scale-depth-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-depth-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-depth-incr"
+
+[node name="neck-scale-depth-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="measure-neck-circ-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "measure-neck-circ-incr"
+
+[node name="measure-neck-circ-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-back-scale-depth-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-back-scale-depth-decr"
+
+[node name="neck-back-scale-depth-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-double-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-double-decr"
+
+[node name="neck-double-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-down_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-down"
+
+[node name="neck-trans-down_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-horiz-incr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-horiz-incr"
+
+[node name="neck-scale-horiz-incr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-backward_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-backward"
+
+[node name="neck-trans-backward_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="measure-neck-height-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "measure-neck-height-decr"
+
+[node name="measure-neck-height-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="measure-neck-circ-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "measure-neck-circ-decr"
+
+[node name="measure-neck-circ-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-forward_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-forward"
+
+[node name="neck-trans-forward_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-depth-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-depth-decr"
+
+[node name="neck-scale-depth-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-scale-horiz-decr_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-scale-horiz-decr"
+
+[node name="neck-scale-horiz-decr_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="neck-trans-out_label" type="Label" parent="neck/neck_vbox"]
+layout_mode = 2
+text = "neck-trans-out"
+
+[node name="neck-trans-out_slider" type="HSlider" parent="neck/neck_vbox"]
+layout_mode = 2
+
+[node name="forehead" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="forehead_vbox" type="VBoxContainer" parent="forehead"]
+layout_mode = 2
+
+[node name="forehead-scale-vert-incr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-scale-vert-incr"
+
+[node name="forehead-scale-vert-incr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-scale-vert-decr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-scale-vert-decr"
+
+[node name="forehead-scale-vert-decr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-temple-decr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-temple-decr"
+
+[node name="forehead-temple-decr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-trans-forward_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-trans-forward"
+
+[node name="forehead-trans-forward_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-trans-backward_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-trans-backward"
+
+[node name="forehead-trans-backward_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-temple-incr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-temple-incr"
+
+[node name="forehead-temple-incr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-nubian-decr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-nubian-decr"
+
+[node name="forehead-nubian-decr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="forehead-nubian-incr_label" type="Label" parent="forehead/forehead_vbox"]
+layout_mode = 2
+text = "forehead-nubian-incr"
+
+[node name="forehead-nubian-incr_slider" type="HSlider" parent="forehead/forehead_vbox"]
+layout_mode = 2
+
+[node name="legs" type="ScrollContainer" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="legs_vbox" type="VBoxContainer" parent="legs"]
+layout_mode = 2
+
+[node name="measure-lowerleg-height-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-lowerleg-height-incr"
+
+[node name="measure-lowerleg-height-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperlegs-height-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperlegs-height-incr"
+
+[node name="upperlegs-height-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-calf-circ-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-calf-circ-decr"
+
+[node name="measure-calf-circ-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerlegs-height-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerlegs-height-incr"
+
+[node name="lowerlegs-height-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-thigh-circ-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-thigh-circ-incr"
+
+[node name="measure-thigh-circ-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-calf-circ-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-calf-circ-incr"
+
+[node name="measure-calf-circ-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="leg-valgus-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "leg-valgus-decr"
+
+[node name="leg-valgus-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-knee-circ-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-knee-circ-incr"
+
+[node name="measure-knee-circ-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-fat-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-fat-decr"
+
+[node name="lowerleg-fat-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-vert-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-vert-decr"
+
+[node name="upperleg-scale-vert-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-horiz-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-horiz-incr"
+
+[node name="lowerleg-scale-horiz-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-thigh-circ-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-thigh-circ-decr"
+
+[node name="measure-thigh-circ-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-vert-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-vert-incr"
+
+[node name="upperleg-scale-vert-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-fat-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-fat-decr"
+
+[node name="upperleg-fat-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperlegs-height-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperlegs-height-decr"
+
+[node name="upperlegs-height-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-horiz-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-horiz-decr"
+
+[node name="upperleg-scale-horiz-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerlegs-height-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerlegs-height-decr"
+
+[node name="lowerlegs-height-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-lowerleg-height-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-lowerleg-height-decr"
+
+[node name="measure-lowerleg-height-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-muscle-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-muscle-decr"
+
+[node name="upperleg-muscle-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-fat-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-fat-incr"
+
+[node name="lowerleg-fat-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-fat-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-fat-incr"
+
+[node name="upperleg-fat-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-upperleg-height-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-upperleg-height-decr"
+
+[node name="measure-upperleg-height-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-knee-circ-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-knee-circ-decr"
+
+[node name="measure-knee-circ-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="leg-valgus-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "leg-valgus-incr"
+
+[node name="leg-valgus-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-horiz-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-horiz-incr"
+
+[node name="upperleg-scale-horiz-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-vert-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-vert-incr"
+
+[node name="lowerleg-scale-vert-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-depth-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-depth-incr"
+
+[node name="lowerleg-scale-depth-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-muscle-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-muscle-incr"
+
+[node name="upperleg-muscle-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-depth-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-depth-decr"
+
+[node name="lowerleg-scale-depth-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-depth-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-depth-decr"
+
+[node name="upperleg-scale-depth-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="upperleg-scale-depth-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "upperleg-scale-depth-incr"
+
+[node name="upperleg-scale-depth-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-muscle-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-muscle-decr"
+
+[node name="lowerleg-muscle-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="measure-upperleg-height-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "measure-upperleg-height-incr"
+
+[node name="measure-upperleg-height-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-muscle-incr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-muscle-incr"
+
+[node name="lowerleg-muscle-incr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-horiz-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-horiz-decr"
+
+[node name="lowerleg-scale-horiz-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[node name="lowerleg-scale-vert-decr_label" type="Label" parent="legs/legs_vbox"]
+layout_mode = 2
+text = "lowerleg-scale-vert-decr"
+
+[node name="lowerleg-scale-vert-decr_slider" type="HSlider" parent="legs/legs_vbox"]
+layout_mode = 2
+
+[connection signal="color_changed" from="Main/skin_ColorPickerButton" to="." method="_on_skin_color_picker_button_color_changed"]
+[connection signal="item_selected" from="Main/gender_OptionButton" to="." method="_on_gender_option_button_item_selected"]
+[connection signal="value_changed" from="Main/Age_Slider" to="." method="_on_age_slider_value_changed"]
+[connection signal="item_selected" from="Main/Outfit_OptionButton" to="." method="_on_outfit_option_button_item_selected"]
+[connection signal="item_selected" from="Main/Race_OptionButton" to="." method="_on_race_option_button_item_selected"]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-down_slider" to="." method="on_slider_changed" binds= ["hip-trans-down"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-up_slider" to="." method="on_slider_changed" binds= ["hip-trans-up"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["hip-scale-vert-decr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["hip-scale-depth-decr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-waist-up_slider" to="." method="on_slider_changed" binds= ["hip-waist-up"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["hip-scale-horiz-decr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-forward_slider" to="." method="on_slider_changed" binds= ["hip-trans-forward"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-backward_slider" to="." method="on_slider_changed" binds= ["hip-trans-backward"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-out_slider" to="." method="on_slider_changed" binds= ["hip-trans-out"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-waist-down_slider" to="." method="on_slider_changed" binds= ["hip-waist-down"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["hip-scale-depth-incr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["hip-scale-horiz-incr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["hip-scale-vert-incr"]]
+[connection signal="value_changed" from="hip/hip_vbox/hip-trans-in_slider" to="." method="on_slider_changed" binds= ["hip-trans-in"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-diameter-incr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-diameter-incr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-length-decr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-length-decr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-trans-out_slider" to="." method="on_slider_changed" binds= ["hand-trans-out"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-trans-in_slider" to="." method="on_slider_changed" binds= ["hand-trans-in"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-distance-incr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-distance-incr"]]
+[connection signal="value_changed" from="hands/hands_vbox/measure-wrist-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-wrist-circ-decr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-diameter-decr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-diameter-decr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-scale-incr_slider" to="." method="on_slider_changed" binds= ["hand-scale-incr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-distance-decr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-distance-decr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-fingers-length-incr_slider" to="." method="on_slider_changed" binds= ["hand-fingers-length-incr"]]
+[connection signal="value_changed" from="hands/hands_vbox/hand-scale-decr_slider" to="." method="on_slider_changed" binds= ["hand-scale-decr"]]
+[connection signal="value_changed" from="hands/hands_vbox/measure-wrist-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-wrist-circ-incr"]]
+[connection signal="value_changed" from="buttocks/buttocks_vbox/buttocks-volume-incr_slider" to="." method="on_slider_changed" binds= ["buttocks-volume-incr"]]
+[connection signal="value_changed" from="buttocks/buttocks_vbox/buttocks-volume-decr_slider" to="." method="on_slider_changed" binds= ["buttocks-volume-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-point-width-decr_slider" to="." method="on_slider_changed" binds= ["nose-point-width-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width1-decr_slider" to="." method="on_slider_changed" binds= ["nose-width1-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-septumangle-decr_slider" to="." method="on_slider_changed" binds= ["nose-septumangle-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-nostrils-width-decr_slider" to="." method="on_slider_changed" binds= ["nose-nostrils-width-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-volume-decr_slider" to="." method="on_slider_changed" binds= ["nose-volume-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["nose-scale-horiz-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-volume-incr_slider" to="." method="on_slider_changed" binds= ["nose-volume-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width2-decr_slider" to="." method="on_slider_changed" binds= ["nose-width2-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-base-up_slider" to="." method="on_slider_changed" binds= ["nose-base-up"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-down_slider" to="." method="on_slider_changed" binds= ["nose-trans-down"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-point-up_slider" to="." method="on_slider_changed" binds= ["nose-point-up"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-hump-decr_slider" to="." method="on_slider_changed" binds= ["nose-hump-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-out_slider" to="." method="on_slider_changed" binds= ["nose-trans-out"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-point-width-incr_slider" to="." method="on_slider_changed" binds= ["nose-point-width-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-compression-uncompress_slider" to="." method="on_slider_changed" binds= ["nose-compression-uncompress"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["nose-scale-vert-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-greek-incr_slider" to="." method="on_slider_changed" binds= ["nose-greek-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["nose-scale-depth-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-up_slider" to="." method="on_slider_changed" binds= ["nose-trans-up"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-forward_slider" to="." method="on_slider_changed" binds= ["nose-trans-forward"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width1-incr_slider" to="." method="on_slider_changed" binds= ["nose-width1-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["nose-scale-depth-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-nostrils-angle-up_slider" to="." method="on_slider_changed" binds= ["nose-nostrils-angle-up"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-curve-convex_slider" to="." method="on_slider_changed" binds= ["nose-curve-convex"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-hump-incr_slider" to="." method="on_slider_changed" binds= ["nose-hump-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-flaring-incr_slider" to="." method="on_slider_changed" binds= ["nose-flaring-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-nostrils-angle-down_slider" to="." method="on_slider_changed" binds= ["nose-nostrils-angle-down"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-nostrils-width-incr_slider" to="." method="on_slider_changed" binds= ["nose-nostrils-width-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["nose-scale-vert-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-curve-concave_slider" to="." method="on_slider_changed" binds= ["nose-curve-concave"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-septumangle-incr_slider" to="." method="on_slider_changed" binds= ["nose-septumangle-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width3-decr_slider" to="." method="on_slider_changed" binds= ["nose-width3-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-point-down_slider" to="." method="on_slider_changed" binds= ["nose-point-down"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-compression-compress_slider" to="." method="on_slider_changed" binds= ["nose-compression-compress"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-flaring-decr_slider" to="." method="on_slider_changed" binds= ["nose-flaring-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-in_slider" to="." method="on_slider_changed" binds= ["nose-trans-in"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-trans-backward_slider" to="." method="on_slider_changed" binds= ["nose-trans-backward"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-base-down_slider" to="." method="on_slider_changed" binds= ["nose-base-down"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width2-incr_slider" to="." method="on_slider_changed" binds= ["nose-width2-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-width3-incr_slider" to="." method="on_slider_changed" binds= ["nose-width3-incr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-greek-decr_slider" to="." method="on_slider_changed" binds= ["nose-greek-decr"]]
+[connection signal="value_changed" from="nose/nose_vbox/nose-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["nose-scale-horiz-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-volume-incr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-volume-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-middle-down_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-middle-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-out_slider" to="." method="on_slider_changed" binds= ["mouth-trans-out"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-vert-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-vert-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-angles-up_slider" to="." method="on_slider_changed" binds= ["mouth-angles-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-in_slider" to="." method="on_slider_changed" binds= ["mouth-trans-in"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-philtrum-volume-incr_slider" to="." method="on_slider_changed" binds= ["mouth-philtrum-volume-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-width-incr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-width-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-depth-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-width-decr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-width-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-cupidsbow-width-incr_slider" to="." method="on_slider_changed" binds= ["mouth-cupidsbow-width-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-backward_slider" to="." method="on_slider_changed" binds= ["mouth-trans-backward"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-volume-incr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-volume-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-horiz-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-ext-down_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-ext-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-ext-up_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-ext-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-cupidsbow-incr_slider" to="." method="on_slider_changed" binds= ["mouth-cupidsbow-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-up_slider" to="." method="on_slider_changed" binds= ["mouth-trans-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-laugh-lines-out_slider" to="." method="on_slider_changed" binds= ["mouth-laugh-lines-out"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-height-decr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-height-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-ext-down_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-ext-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-middle-up_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-middle-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-middle-up_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-middle-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-ext-up_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-ext-up"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-dimples-out_slider" to="." method="on_slider_changed" binds= ["mouth-dimples-out"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-dimples-in_slider" to="." method="on_slider_changed" binds= ["mouth-dimples-in"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-philtrum-volume-decr_slider" to="." method="on_slider_changed" binds= ["mouth-philtrum-volume-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-height-incr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-height-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-laugh-lines-in_slider" to="." method="on_slider_changed" binds= ["mouth-laugh-lines-in"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-cupidsbow-decr_slider" to="." method="on_slider_changed" binds= ["mouth-cupidsbow-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-horiz-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-width-incr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-width-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-middle-down_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-middle-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-cupidsbow-width-decr_slider" to="." method="on_slider_changed" binds= ["mouth-cupidsbow-width-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-forward_slider" to="." method="on_slider_changed" binds= ["mouth-trans-forward"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-volume-decr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-volume-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-angles-down_slider" to="." method="on_slider_changed" binds= ["mouth-angles-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-volume-decr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-volume-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-upperlip-width-decr_slider" to="." method="on_slider_changed" binds= ["mouth-upperlip-width-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-height-incr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-height-incr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-lowerlip-height-decr_slider" to="." method="on_slider_changed" binds= ["mouth-lowerlip-height-decr"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-trans-down_slider" to="." method="on_slider_changed" binds= ["mouth-trans-down"]]
+[connection signal="value_changed" from="mouth/mouth_vbox/mouth-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["mouth-scale-depth-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-depth-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-fat-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-fat-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-vert-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-shoulder-muscle-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-shoulder-muscle-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-horiz-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-shoulder-muscle-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-shoulder-muscle-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-upperarm-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-upperarm-circ-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-muscle-incr_slider" to="." method="on_slider_changed" binds= ["lowerarm-muscle-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-horiz-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-upperarm-length-decr_slider" to="." method="on_slider_changed" binds= ["measure-upperarm-length-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-fat-decr_slider" to="." method="on_slider_changed" binds= ["lowerarm-fat-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-vert-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-upperarm-length-incr_slider" to="." method="on_slider_changed" binds= ["measure-upperarm-length-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-depth-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-vert-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["lowerarm-scale-depth-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-vert-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-horiz-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-muscle-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-muscle-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-fat-incr_slider" to="." method="on_slider_changed" binds= ["lowerarm-fat-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-lowerarm-length-incr_slider" to="." method="on_slider_changed" binds= ["measure-lowerarm-length-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-upperarm-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-upperarm-circ-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-fat-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-fat-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/measure-lowerarm-length-decr_slider" to="." method="on_slider_changed" binds= ["measure-lowerarm-length-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-muscle-incr_slider" to="." method="on_slider_changed" binds= ["upperarm-muscle-incr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-depth-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/upperarm-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["upperarm-scale-horiz-decr"]]
+[connection signal="value_changed" from="arms/arms_vbox/lowerarm-muscle-decr_slider" to="." method="on_slider_changed" binds= ["lowerarm-muscle-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-flap-incr_slider" to="." method="on_slider_changed" binds= ["ear-flap-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-shape-round_slider" to="." method="on_slider_changed" binds= ["ear-shape-round"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-wing-incr_slider" to="." method="on_slider_changed" binds= ["ear-wing-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-lobe-decr_slider" to="." method="on_slider_changed" binds= ["ear-lobe-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-rot-backward_slider" to="." method="on_slider_changed" binds= ["ear-rot-backward"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-shape-pointed_slider" to="." method="on_slider_changed" binds= ["ear-shape-pointed"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-shape-square_slider" to="." method="on_slider_changed" binds= ["ear-shape-square"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-incr_slider" to="." method="on_slider_changed" binds= ["ear-scale-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["ear-scale-vert-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-trans-down_slider" to="." method="on_slider_changed" binds= ["ear-trans-down"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-shape-triangle_slider" to="." method="on_slider_changed" binds= ["ear-shape-triangle"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-trans-forward_slider" to="." method="on_slider_changed" binds= ["ear-trans-forward"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-trans-up_slider" to="." method="on_slider_changed" binds= ["ear-trans-up"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-rot-forward_slider" to="." method="on_slider_changed" binds= ["ear-rot-forward"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-decr_slider" to="." method="on_slider_changed" binds= ["ear-scale-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-lobe-incr_slider" to="." method="on_slider_changed" binds= ["ear-lobe-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-trans-backward_slider" to="." method="on_slider_changed" binds= ["ear-trans-backward"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["ear-scale-depth-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["ear-scale-vert-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-wing-decr_slider" to="." method="on_slider_changed" binds= ["ear-wing-decr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["ear-scale-depth-incr"]]
+[connection signal="value_changed" from="ears/ears_vbox/ear-flap-decr_slider" to="." method="on_slider_changed" binds= ["ear-flap-decr"]]
+[connection signal="value_changed" from="pelvis/pelvis_vbox/pelvis-tone-incr_slider" to="." method="on_slider_changed" binds= ["pelvis-tone-incr"]]
+[connection signal="value_changed" from="pelvis/pelvis_vbox/bulge-decr_slider" to="." method="on_slider_changed" binds= ["bulge-decr"]]
+[connection signal="value_changed" from="pelvis/pelvis_vbox/pelvis-tone-decr_slider" to="." method="on_slider_changed" binds= ["pelvis-tone-decr"]]
+[connection signal="value_changed" from="pelvis/pelvis_vbox/bulge-incr_slider" to="." method="on_slider_changed" binds= ["bulge-incr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-inner-decr_slider" to="." method="on_slider_changed" binds= ["cheek-inner-decr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-bones-incr_slider" to="." method="on_slider_changed" binds= ["cheek-bones-incr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-trans-down_slider" to="." method="on_slider_changed" binds= ["cheek-trans-down"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-volume-incr_slider" to="." method="on_slider_changed" binds= ["cheek-volume-incr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-inner-incr_slider" to="." method="on_slider_changed" binds= ["cheek-inner-incr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-bones-decr_slider" to="." method="on_slider_changed" binds= ["cheek-bones-decr"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-trans-up_slider" to="." method="on_slider_changed" binds= ["cheek-trans-up"]]
+[connection signal="value_changed" from="cheek/cheek_vbox/cheek-volume-decr_slider" to="." method="on_slider_changed" binds= ["cheek-volume-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height2-incr_slider" to="." method="on_slider_changed" binds= ["eye-height2-incr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-push1-in_slider" to="." method="on_slider_changed" binds= ["eye-push1-in"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-convex_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-convex"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-concave_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-concave"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-epicanthus-out_slider" to="." method="on_slider_changed" binds= ["eye-epicanthus-out"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-trans-down_slider" to="." method="on_slider_changed" binds= ["eye-trans-down"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-out_slider" to="." method="on_slider_changed" binds= ["eye-bag-out"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-in_slider" to="." method="on_slider_changed" binds= ["eye-bag-in"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-decr_slider" to="." method="on_slider_changed" binds= ["eye-bag-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-angle-up_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-angle-up"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-corner1-down_slider" to="." method="on_slider_changed" binds= ["eye-corner1-down"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-down_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-down"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-trans-in_slider" to="." method="on_slider_changed" binds= ["eye-trans-in"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-push2-out_slider" to="." method="on_slider_changed" binds= ["eye-push2-out"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-trans-out_slider" to="." method="on_slider_changed" binds= ["eye-trans-out"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-up_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-up"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height1-decr_slider" to="." method="on_slider_changed" binds= ["eye-height1-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-corner2-down_slider" to="." method="on_slider_changed" binds= ["eye-corner2-down"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height2-decr_slider" to="." method="on_slider_changed" binds= ["eye-height2-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-incr_slider" to="." method="on_slider_changed" binds= ["eye-bag-incr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-eyefold-angle-down_slider" to="." method="on_slider_changed" binds= ["eye-eyefold-angle-down"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-corner2-up_slider" to="." method="on_slider_changed" binds= ["eye-corner2-up"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-scale-decr_slider" to="." method="on_slider_changed" binds= ["eye-scale-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-push1-out_slider" to="." method="on_slider_changed" binds= ["eye-push1-out"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-trans-up_slider" to="." method="on_slider_changed" binds= ["eye-trans-up"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-push2-in_slider" to="." method="on_slider_changed" binds= ["eye-push2-in"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-scale-incr_slider" to="." method="on_slider_changed" binds= ["eye-scale-incr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height3-incr_slider" to="." method="on_slider_changed" binds= ["eye-height3-incr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height3-decr_slider" to="." method="on_slider_changed" binds= ["eye-height3-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-height-decr_slider" to="." method="on_slider_changed" binds= ["eye-bag-height-decr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-corner1-up_slider" to="." method="on_slider_changed" binds= ["eye-corner1-up"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-epicanthus-in_slider" to="." method="on_slider_changed" binds= ["eye-epicanthus-in"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-height1-incr_slider" to="." method="on_slider_changed" binds= ["eye-height1-incr"]]
+[connection signal="value_changed" from="eyes/eyes_vbox/eye-bag-height-incr_slider" to="." method="on_slider_changed" binds= ["eye-bag-height-incr"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-navel-out_slider" to="." method="on_slider_changed" binds= ["stomach-navel-out"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-tone-incr_slider" to="." method="on_slider_changed" binds= ["stomach-tone-incr"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-pregnant-incr_slider" to="." method="on_slider_changed" binds= ["stomach-pregnant-incr"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-tone-decr_slider" to="." method="on_slider_changed" binds= ["stomach-tone-decr"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-pregnant-decr_slider" to="." method="on_slider_changed" binds= ["stomach-pregnant-decr"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-navel-in_slider" to="." method="on_slider_changed" binds= ["stomach-navel-in"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-navel-down_slider" to="." method="on_slider_changed" binds= ["stomach-navel-down"]]
+[connection signal="value_changed" from="stomach/stomach_vbox/stomach-navel-up_slider" to="." method="on_slider_changed" binds= ["stomach-navel-up"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-angle-down_slider" to="." method="on_slider_changed" binds= ["eyebrows-angle-down"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-trans-up_slider" to="." method="on_slider_changed" binds= ["eyebrows-trans-up"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-trans-forward_slider" to="." method="on_slider_changed" binds= ["eyebrows-trans-forward"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-trans-down_slider" to="." method="on_slider_changed" binds= ["eyebrows-trans-down"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-trans-backward_slider" to="." method="on_slider_changed" binds= ["eyebrows-trans-backward"]]
+[connection signal="value_changed" from="eyebrows/eyebrows_vbox/eyebrows-angle-up_slider" to="." method="on_slider_changed" binds= ["eyebrows-angle-up"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-height-decr_slider" to="." method="on_slider_changed" binds= ["chin-height-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-jaw-drop-incr_slider" to="." method="on_slider_changed" binds= ["chin-jaw-drop-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-bones-decr_slider" to="." method="on_slider_changed" binds= ["chin-bones-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-cleft-decr_slider" to="." method="on_slider_changed" binds= ["chin-cleft-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-prognathism-decr_slider" to="." method="on_slider_changed" binds= ["chin-prognathism-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-prognathism-incr_slider" to="." method="on_slider_changed" binds= ["chin-prognathism-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-width-incr_slider" to="." method="on_slider_changed" binds= ["chin-width-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-height-incr_slider" to="." method="on_slider_changed" binds= ["chin-height-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-bones-incr_slider" to="." method="on_slider_changed" binds= ["chin-bones-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-cleft-incr_slider" to="." method="on_slider_changed" binds= ["chin-cleft-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-triangle_slider" to="." method="on_slider_changed" binds= ["chin-triangle"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-prominent-decr_slider" to="." method="on_slider_changed" binds= ["chin-prominent-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-jaw-drop-decr_slider" to="." method="on_slider_changed" binds= ["chin-jaw-drop-decr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-prominent-incr_slider" to="." method="on_slider_changed" binds= ["chin-prominent-incr"]]
+[connection signal="value_changed" from="chin/chin_vbox/chin-width-decr_slider" to="." method="on_slider_changed" binds= ["chin-width-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["head-scale-horiz-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-triangular_slider" to="." method="on_slider_changed" binds= ["head-triangular"]]
+[connection signal="value_changed" from="head/head_vbox/head-oval_slider" to="." method="on_slider_changed" binds= ["head-oval"]]
+[connection signal="value_changed" from="head/head_vbox/head-round_slider" to="." method="on_slider_changed" binds= ["head-round"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-in_slider" to="." method="on_slider_changed" binds= ["head-trans-in"]]
+[connection signal="value_changed" from="head/head_vbox/head-rectangular_slider" to="." method="on_slider_changed" binds= ["head-rectangular"]]
+[connection signal="value_changed" from="head/head_vbox/head-angle-in_slider" to="." method="on_slider_changed" binds= ["head-angle-in"]]
+[connection signal="value_changed" from="head/head_vbox/head-age-incr_slider" to="." method="on_slider_changed" binds= ["head-age-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-back-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["head-back-scale-depth-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-invertedtriangular_slider" to="." method="on_slider_changed" binds= ["head-invertedtriangular"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-down_slider" to="." method="on_slider_changed" binds= ["head-trans-down"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["head-scale-vert-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-up_slider" to="." method="on_slider_changed" binds= ["head-trans-up"]]
+[connection signal="value_changed" from="head/head_vbox/head-diamond_slider" to="." method="on_slider_changed" binds= ["head-diamond"]]
+[connection signal="value_changed" from="head/head_vbox/head-fat-incr_slider" to="." method="on_slider_changed" binds= ["head-fat-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-backward_slider" to="." method="on_slider_changed" binds= ["head-trans-backward"]]
+[connection signal="value_changed" from="head/head_vbox/head-age-decr_slider" to="." method="on_slider_changed" binds= ["head-age-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["head-scale-vert-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["head-scale-horiz-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-forward_slider" to="." method="on_slider_changed" binds= ["head-trans-forward"]]
+[connection signal="value_changed" from="head/head_vbox/head-square_slider" to="." method="on_slider_changed" binds= ["head-square"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["head-scale-depth-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-angle-out_slider" to="." method="on_slider_changed" binds= ["head-angle-out"]]
+[connection signal="value_changed" from="head/head_vbox/head-fat-decr_slider" to="." method="on_slider_changed" binds= ["head-fat-decr"]]
+[connection signal="value_changed" from="head/head_vbox/head-back-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["head-back-scale-depth-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["head-scale-depth-incr"]]
+[connection signal="value_changed" from="head/head_vbox/head-trans-out_slider" to="." method="on_slider_changed" binds= ["head-trans-out"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-frontchest-dist-incr_slider" to="." method="on_slider_changed" binds= ["measure-frontchest-dist-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["torso-scale-vert-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-napetowaist-dist-decr_slider" to="." method="on_slider_changed" binds= ["measure-napetowaist-dist-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-bust-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-bust-circ-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-bust-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-bust-circ-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-backward_slider" to="." method="on_slider_changed" binds= ["torso-trans-backward"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-waist-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-waist-circ-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-underbust-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-underbust-circ-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["torso-scale-horiz-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-hips-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-hips-circ-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-vshape-incr_slider" to="." method="on_slider_changed" binds= ["torso-vshape-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-muscle-dorsi-decr_slider" to="." method="on_slider_changed" binds= ["torso-muscle-dorsi-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-muscle-pectoral-decr_slider" to="." method="on_slider_changed" binds= ["torso-muscle-pectoral-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-waisttohip-dist-incr_slider" to="." method="on_slider_changed" binds= ["measure-waisttohip-dist-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-napetowaist-dist-incr_slider" to="." method="on_slider_changed" binds= ["measure-napetowaist-dist-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-shoulder-dist-decr_slider" to="." method="on_slider_changed" binds= ["measure-shoulder-dist-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-in_slider" to="." method="on_slider_changed" binds= ["torso-trans-in"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-muscle-pectoral-incr_slider" to="." method="on_slider_changed" binds= ["torso-muscle-pectoral-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["torso-scale-depth-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["torso-scale-vert-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-up_slider" to="." method="on_slider_changed" binds= ["torso-trans-up"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-muscle-dorsi-incr_slider" to="." method="on_slider_changed" binds= ["torso-muscle-dorsi-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-frontchest-dist-decr_slider" to="." method="on_slider_changed" binds= ["measure-frontchest-dist-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-underbust-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-underbust-circ-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-shoulder-dist-incr_slider" to="." method="on_slider_changed" binds= ["measure-shoulder-dist-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-hips-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-hips-circ-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-waisttohip-dist-decr_slider" to="." method="on_slider_changed" binds= ["measure-waisttohip-dist-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/measure-waist-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-waist-circ-incr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-forward_slider" to="." method="on_slider_changed" binds= ["torso-trans-forward"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["torso-scale-depth-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["torso-scale-horiz-decr"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-out_slider" to="." method="on_slider_changed" binds= ["torso-trans-out"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-trans-down_slider" to="." method="on_slider_changed" binds= ["torso-trans-down"]]
+[connection signal="value_changed" from="torso/torso_vbox/torso-vshape-decr_slider" to="." method="on_slider_changed" binds= ["torso-vshape-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-incr_slider" to="." method="on_slider_changed" binds= ["foot-scale-incr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["foot-scale-depth-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["foot-scale-vert-incr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["foot-scale-horiz-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-in_slider" to="." method="on_slider_changed" binds= ["foot-trans-in"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-down_slider" to="." method="on_slider_changed" binds= ["foot-trans-down"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-decr_slider" to="." method="on_slider_changed" binds= ["foot-scale-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-forward_slider" to="." method="on_slider_changed" binds= ["foot-trans-forward"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["foot-scale-horiz-incr"]]
+[connection signal="value_changed" from="feet/feet_vbox/measure-ankle-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-ankle-circ-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/measure-ankle-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-ankle-circ-incr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["foot-scale-vert-decr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-up_slider" to="." method="on_slider_changed" binds= ["foot-trans-up"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-out_slider" to="." method="on_slider_changed" binds= ["foot-trans-out"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["foot-scale-depth-incr"]]
+[connection signal="value_changed" from="feet/feet_vbox/foot-trans-backward_slider" to="." method="on_slider_changed" binds= ["foot-trans-backward"]]
+[connection signal="value_changed" from="neck/neck_vbox/measure-neck-height-incr_slider" to="." method="on_slider_changed" binds= ["measure-neck-height-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-in_slider" to="." method="on_slider_changed" binds= ["neck-trans-in"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-double-incr_slider" to="." method="on_slider_changed" binds= ["neck-double-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["neck-scale-vert-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["neck-scale-vert-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-up_slider" to="." method="on_slider_changed" binds= ["neck-trans-up"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-back-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["neck-back-scale-depth-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["neck-scale-depth-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/measure-neck-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-neck-circ-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-back-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["neck-back-scale-depth-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-double-decr_slider" to="." method="on_slider_changed" binds= ["neck-double-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-down_slider" to="." method="on_slider_changed" binds= ["neck-trans-down"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["neck-scale-horiz-incr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-backward_slider" to="." method="on_slider_changed" binds= ["neck-trans-backward"]]
+[connection signal="value_changed" from="neck/neck_vbox/measure-neck-height-decr_slider" to="." method="on_slider_changed" binds= ["measure-neck-height-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/measure-neck-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-neck-circ-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-forward_slider" to="." method="on_slider_changed" binds= ["neck-trans-forward"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["neck-scale-depth-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["neck-scale-horiz-decr"]]
+[connection signal="value_changed" from="neck/neck_vbox/neck-trans-out_slider" to="." method="on_slider_changed" binds= ["neck-trans-out"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["forehead-scale-vert-incr"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["forehead-scale-vert-decr"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-temple-decr_slider" to="." method="on_slider_changed" binds= ["forehead-temple-decr"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-trans-forward_slider" to="." method="on_slider_changed" binds= ["forehead-trans-forward"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-trans-backward_slider" to="." method="on_slider_changed" binds= ["forehead-trans-backward"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-temple-incr_slider" to="." method="on_slider_changed" binds= ["forehead-temple-incr"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-nubian-decr_slider" to="." method="on_slider_changed" binds= ["forehead-nubian-decr"]]
+[connection signal="value_changed" from="forehead/forehead_vbox/forehead-nubian-incr_slider" to="." method="on_slider_changed" binds= ["forehead-nubian-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-lowerleg-height-incr_slider" to="." method="on_slider_changed" binds= ["measure-lowerleg-height-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperlegs-height-incr_slider" to="." method="on_slider_changed" binds= ["upperlegs-height-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-calf-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-calf-circ-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerlegs-height-incr_slider" to="." method="on_slider_changed" binds= ["lowerlegs-height-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-thigh-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-thigh-circ-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-calf-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-calf-circ-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/leg-valgus-decr_slider" to="." method="on_slider_changed" binds= ["leg-valgus-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-knee-circ-incr_slider" to="." method="on_slider_changed" binds= ["measure-knee-circ-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-fat-decr_slider" to="." method="on_slider_changed" binds= ["lowerleg-fat-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-vert-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-horiz-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-thigh-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-thigh-circ-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-vert-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-fat-decr_slider" to="." method="on_slider_changed" binds= ["upperleg-fat-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperlegs-height-decr_slider" to="." method="on_slider_changed" binds= ["upperlegs-height-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-horiz-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerlegs-height-decr_slider" to="." method="on_slider_changed" binds= ["lowerlegs-height-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-lowerleg-height-decr_slider" to="." method="on_slider_changed" binds= ["measure-lowerleg-height-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-muscle-decr_slider" to="." method="on_slider_changed" binds= ["upperleg-muscle-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-fat-incr_slider" to="." method="on_slider_changed" binds= ["lowerleg-fat-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-fat-incr_slider" to="." method="on_slider_changed" binds= ["upperleg-fat-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-upperleg-height-decr_slider" to="." method="on_slider_changed" binds= ["measure-upperleg-height-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-knee-circ-decr_slider" to="." method="on_slider_changed" binds= ["measure-knee-circ-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/leg-valgus-incr_slider" to="." method="on_slider_changed" binds= ["leg-valgus-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-horiz-incr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-horiz-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-vert-incr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-vert-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-depth-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-muscle-incr_slider" to="." method="on_slider_changed" binds= ["upperleg-muscle-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-depth-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-depth-decr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-depth-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/upperleg-scale-depth-incr_slider" to="." method="on_slider_changed" binds= ["upperleg-scale-depth-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-muscle-decr_slider" to="." method="on_slider_changed" binds= ["lowerleg-muscle-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/measure-upperleg-height-incr_slider" to="." method="on_slider_changed" binds= ["measure-upperleg-height-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-muscle-incr_slider" to="." method="on_slider_changed" binds= ["lowerleg-muscle-incr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-horiz-decr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-horiz-decr"]]
+[connection signal="value_changed" from="legs/legs_vbox/lowerleg-scale-vert-decr_slider" to="." method="on_slider_changed" binds= ["lowerleg-scale-vert-decr"]]

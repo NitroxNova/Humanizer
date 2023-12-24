@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://babqtn4lfhfc2"]
+
+[sub_resource type="GDScript" id="GDScript_ttdg8"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	delete_folder(\"res://mpfb2_plugin/mpfb/data/targets/asym\")
+	delete_folder(\"res://mpfb2_plugin/mpfb/data/targets/genitals\")
+	delete_folder(\"res://mpfb2_plugin/mpfb/data/targets/breast\")
+	delete_folder(\"res://mpfb2_plugin/mpfb/data/targets/macrodetails/height\")
+	delete_folder(\"res://mpfb2_plugin/mpfb/data/targets/macrodetails/proportions\")
+	get_target_files(\"res://mpfb2_plugin/mpfb/data/targets\")
+
+func delete_folder(path:String):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != \"\":
+			if dir.current_is_dir():
+				delete_folder(path + \"/\" + file_name)
+			else:
+				DirAccess.remove_absolute(path + \"/\" + file_name)
+			file_name = dir.get_next()
+		DirAccess.remove_absolute(path)
+	else:
+		print(\"An error occurred when trying to access the path.\")
+
+func get_target_files(path):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != \"\":
+			if dir.current_is_dir():
+				get_target_files(path + \"/\" + file_name)
+			elif file_name.get_extension() == \"target\" and file_name.substr(0,2) == \"l-\":
+				merge_shapekeys(path , file_name)
+			file_name = dir.get_next()
+	else:
+		print(\"An error occurred when trying to access the path.\")
+	
+func merge_shapekeys(path:String,file_name:String):
+	print(file_name)
+	var merge_file_name = file_name.substr(2)
+	var merge_file = FileAccess.open(path + \"/\" + merge_file_name,FileAccess.WRITE)
+	var target_file = FileAccess.open(path + \"/\" +file_name,FileAccess.READ)
+	while target_file.get_position() < target_file.get_length():
+		var line = target_file.get_line()
+		merge_file.store_line(line)
+	target_file = FileAccess.open(path + \"/r-\" +merge_file_name,FileAccess.READ)
+	while target_file.get_position() < target_file.get_length():
+		var line = target_file.get_line()
+		merge_file.store_line(line)
+	DirAccess.remove_absolute(path + \"/\" +file_name)
+	DirAccess.remove_absolute(path + \"/r-\" +merge_file_name)
+		
+"
+
+[node name="Clean_and_Merge" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ttdg8")

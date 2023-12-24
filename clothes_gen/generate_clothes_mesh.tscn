@@ -60,7 +60,7 @@ func process_blend_shape_shading(shape_name:String):
 	blend_arrays.append(curr_bs)
 	
 func load_shapekey_data():
-	var data = Utils.read_json(\"res://generate_mesh/shapekey_data.json\")
+	var data = Utils.read_json(\"res://process_shapekeys/shapekey_data.json\")
 	for i in data.basis.size():
 		data.basis[i] = Utils.array_to_vector3(data.basis[i])
 	for shape_name in data.shape_keys:
@@ -95,4 +95,4 @@ func process_shapekey(shape_name:String):
 
 [node name="generate_clothes_mesh" type="Node3D"]
 script = SubResource("GDScript_sufwu")
-clothes_name = "high-poly_eyes"
+clothes_name = "female_elegantsuit01"

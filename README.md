@@ -1,8 +1,14 @@
+IMPORTANT  
+in-game character menu will work out of the box, but if you want to re-generate the shapekeys or menu tabs:  
+first download the latest nightly zip from http://files.makehumancommunity.org/plugins/  
+extract into the 'mpfb2_plugin' folder, and move the mpfb folder up a level  
+the path should be project_folder/mpfb2_plugin/mpfb/  
+  
 # Humanizer
 convert MPFB2 to Godot4  
 added the in-game character menu! its set as the main scene, so use the 'run' arrow to open  
-latest devlog - https://youtu.be/3ENzWhdEVww    
-
+latest devlog -  https://youtu.be/isv3tEuZHc8      
+  
 Resources:  
 http://static.makehumancommunity.org/mpfb.html  
 http://www.makehumancommunity.org/  

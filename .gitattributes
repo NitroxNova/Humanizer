@@ -1,0 +1,5 @@
+generate_mesh/human.res filter=lfs diff=lfs merge=lfs -text
+generate_mesh/human_shaded.res filter=lfs diff=lfs merge=lfs -text
+generate_mesh/human_unshaded.res filter=lfs diff=lfs merge=lfs -text
+process_shapekeys/shapekey_data.json filter=lfs diff=lfs merge=lfs -text
+clothes_gen/male_elegantsuit01/mesh.res filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,70 @@
+[gd_scene load_steps=3 format=3 uid="uid://cplax42hyfoa1"]
+
+[ext_resource type="ArrayMesh" uid="uid://cv7ujxlrjufuu" path="res://human_model/helpers.res" id="1_6qofj"]
+
+[sub_resource type="GDScript" id="GDScript_c08nw"]
+script/source = "extends Node3D
+
+@onready var helper_vertex = $Helpers.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+@onready var b2g_index = Utils.create_unique_index(helper_vertex)
+var shapekey_data = {}
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	make_basis()
+	shapekey_data.shape_keys = {}
+	get_target_files(\"res://mpfb2_plugin/mpfb/data/targets/\")
+	for i in shapekey_data.basis.size():
+		shapekey_data.basis[i] = Utils.vector3_to_array(shapekey_data.basis[i])
+	Utils.save_json(\"res://process_shapekeys/shapekey_data.json\",shapekey_data)
+	
+func make_basis():
+	shapekey_data.basis = []
+	for b_index in b2g_index.size():
+		var g_index = b2g_index[b_index][0]
+		var coords = helper_vertex[g_index]
+		shapekey_data.basis.append(coords)
+
+func process_shapekey(path:String):
+	var shape_name = path.get_file().get_basename()
+	shapekey_data.shape_keys[shape_name] = {}
+	var target_file = FileAccess.open(path,FileAccess.READ)
+	while target_file.get_position() < target_file.get_length():
+		var line = target_file.get_line()
+		var floats = line.split_floats(\" \")
+		var sk_index = floats[0]
+		var sk_coords = Vector3(floats[1],floats[2],floats[3])
+		sk_coords *= 0.10000000149011612
+		sk_coords += shapekey_data.basis[sk_index]
+		shapekey_data.shape_keys[shape_name][sk_index] = Utils.vector3_to_array(sk_coords)
+		
+func get_target_files(path):
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != \"\":
+			if dir.current_is_dir():
+				get_target_files(path + \"/\" + file_name)
+			elif file_name.get_extension() == \"target\":
+				process_shapekey(path + \"/\" + file_name)
+			file_name = dir.get_next()
+	else:
+		print(\"An error occurred when trying to access the path.\")
+"
+
+[node name="load_shapekey_data" type="Node3D"]
+script = SubResource("GDScript_c08nw")
+
+[node name="Helpers" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_6qofj")
+blend_shapes/$md-$af-$fe-$yn = 0.0
+blend_shapes/$md-$af-$ma-$yn = 0.0
+blend_shapes/$md-$as-$fe-$yn = 0.0
+blend_shapes/$md-$as-$ma-$yn = 0.0
+blend_shapes/$md-$ca-$fe-$yn = 0.0
+blend_shapes/$md-$ca-$ma-$yn = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-$avcup-max$fi = 0.0
+blend_shapes/$md-$fe-$yn-$av$mu-$av$wg-maxcup-$av$fi = 0.0
+blend_shapes/$md-universal-$fe-$yn-$av$mu-$av$wg = 0.0
+blend_shapes/$md-universal-$ma-$yn-$av$mu-$av$wg = 0.0

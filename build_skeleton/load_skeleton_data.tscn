@@ -7,8 +7,8 @@ script/source = "extends Node3D
 
 @onready var skeleton = $human/Human_rig/Skeleton3D
 var skeleton_data = {}
-var shapekey_data = Utils.read_json(\"res://generate_mesh/shapekey_data.json\")
-var vertex_groups = Utils.read_json(\"res://build_skeleton/basemesh_vertex_groups.json\")
+var shapekey_data = Utils.read_json(\"res://process_shapekeys/shapekey_data.json\")
+var vertex_groups = Utils.read_json(\"res://mpfb2_plugin/mpfb/data/mesh_metadata/basemesh_vertex_groups.json\")
 @onready var mixamo_config = load_mixamo_config()
 
 func _ready():
@@ -42,7 +42,7 @@ func make_shape_keys():
 		shape_id += 1
 	
 func load_mixamo_config():
-	var in_data = Utils.read_json(\"res://build_skeleton/rig.mixamo.json\").bones
+	var in_data = Utils.read_json(\"res://mpfb2_plugin/mpfb/data/rigs/standard/rig.mixamo.json\").bones
 	var out_data = []
 	out_data.resize(skeleton.get_bone_count())
 	for in_name in in_data:

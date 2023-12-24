@@ -1,0 +1,227 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3vu56mi8x2et"]
+
+[sub_resource type="GDScript" id="GDScript_siu0o"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	set_recursive_owner($Menu/Main)
+	make_tabs(\"res://mpfb2_plugin/mpfb/data/targets\")
+	var save_scene = PackedScene.new()
+	save_scene.pack($Menu)
+	ResourceSaver.save(save_scene,\"res://character_menu/generate_tabs/output.tscn\")
+	
+func set_recursive_owner(node:Node):
+	node.owner = $Menu
+	for child in node.get_children():
+		set_recursive_owner(child)
+	
+func process_tab(path:String,file_name:String):
+	var scroll_box = ScrollContainer.new()
+	scroll_box.name = file_name
+	$Menu.add_child(scroll_box)
+	scroll_box.owner = $Menu
+	
+	var vbox = VBoxContainer.new()
+	vbox.name = file_name + \"_vbox\"
+	scroll_box.add_child(vbox)
+	vbox.owner = $Menu
+	var target_names = get_file_names(path + \"/\" + file_name)
+	for tn :String in target_names:
+		var label = Label.new()
+		var base_name = tn.get_basename()
+		label.text = base_name
+		vbox.add_child(label)
+		label.owner = $Menu
+		label.name = base_name + \"_label\"
+		var slider = HSlider.new()
+		vbox.add_child(slider)
+		slider.owner = $Menu
+		slider.name = base_name + \"_slider\"
+		var callable = $Menu.on_slider_changed
+		callable = callable.bind(base_name)
+		slider.value_changed.connect(callable,CONNECT_PERSIST)
+	
+func get_file_names(path):
+	var names = []
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != \"\":
+			if dir.current_is_dir():
+				#print(\"Found directory: \" + file_name)
+				pass
+			elif file_name.get_extension() == \"target\":
+				#print(\"Found file: \" + file_name)
+				names.append(file_name)
+			file_name = dir.get_next()
+	else:
+		print(\"An error occurred when trying to access the path.\")
+	return names
+	
+func make_tabs(path):
+	var ignore_folders = [\"expression\",\"_images\",\"macrodetails\"]
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != \"\":
+			if dir.current_is_dir() and not file_name in ignore_folders:
+				#print(\"Found directory: \" + file_name)
+				process_tab(path,file_name)
+			else:
+				#print(\"Found file: \" + file_name)
+				pass
+			file_name = dir.get_next()
+	else:
+		print(\"An error occurred when trying to access the path.\")
+
+"
+
+[sub_resource type="GDScript" id="GDScript_egyil"]
+script/source = "extends TabContainer
+
+signal slider_changed(value,sk_name)
+signal skin_color_changed(color:Color)
+signal gender_changed(gender:String)
+signal age_changed(age:float)
+signal outfit_changed(clothes_mesh:ArrayMesh)
+signal race_changed(race:String)
+
+func on_slider_changed(value,sk_name:String):
+	#print(sk_name + \" - \" + str(value))
+	slider_changed.emit(value,sk_name)
+
+
+func _on_skin_color_picker_button_color_changed(color):
+	skin_color_changed.emit(color)
+
+
+func _on_gender_option_button_item_selected(index):
+	if index == 0:
+		gender_changed.emit(Human_Character.GENDER.male)
+	else:
+		gender_changed.emit(Human_Character.GENDER.female)
+	change_clothes()
+
+
+func _on_age_slider_value_changed(value):
+	$Main/age_label.text = \"Age - \" + str(value)
+	age_changed.emit(value)
+
+
+func _on_outfit_option_button_item_selected(index):
+	change_clothes()
+	
+func change_clothes():
+	var clothes_option = $Main/Outfit_OptionButton.selected
+	var gender = $Main/gender_OptionButton.selected
+	if clothes_option == 0:
+		if gender == 0:
+			outfit_changed.emit(load(\"res://clothes_gen/male_casualsuit04/mesh.res\"))
+		else:
+			outfit_changed.emit(load(\"res://clothes_gen/female_casualsuit02/mesh.res\"))
+	elif clothes_option == 1:
+		if  gender == 0:
+			outfit_changed.emit(load(\"res://clothes_gen/male_elegantsuit01/mesh.res\"))
+		else:
+			outfit_changed.emit(load(\"res://clothes_gen/female_elegantsuit01/mesh.res\"))
+
+
+func _on_race_option_button_item_selected(index):
+	if index == 0:
+		race_changed.emit(Human_Character.RACE.caucasian)
+	elif index == 1:
+		race_changed.emit(Human_Character.RACE.asian)
+	elif index == 2:
+		race_changed.emit(Human_Character.RACE.african)
+"
+
+[node name="Generate_Tabs" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_siu0o")
+
+[node name="Menu" type="TabContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
+script = SubResource("GDScript_egyil")
+
+[node name="Main" type="VBoxContainer" parent="Menu"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "New Character"
+
+[node name="skin_color_label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "Skin Color"
+
+[node name="skin_ColorPickerButton" type="ColorPickerButton" parent="Menu/Main"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="gender_label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "Gender"
+
+[node name="gender_OptionButton" type="OptionButton" parent="Menu/Main"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Male"
+popup/item_0/id = 0
+popup/item_1/text = "Female"
+popup/item_1/id = 1
+
+[node name="age_label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "Age - 25"
+
+[node name="Age_Slider" type="HSlider" parent="Menu/Main"]
+layout_mode = 2
+value = 25.0
+
+[node name="outfit_label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "Outfit"
+
+[node name="Outfit_OptionButton" type="OptionButton" parent="Menu/Main"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Casual"
+popup/item_0/id = 0
+popup/item_1/text = "Fancy"
+popup/item_1/id = 1
+
+[node name="Race_label" type="Label" parent="Menu/Main"]
+layout_mode = 2
+text = "Race"
+
+[node name="Race_OptionButton" type="OptionButton" parent="Menu/Main"]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "Caucasian"
+popup/item_0/id = 0
+popup/item_1/text = "Asian"
+popup/item_1/id = 1
+popup/item_2/text = "African"
+popup/item_2/id = 2
+
+[connection signal="color_changed" from="Menu/Main/skin_ColorPickerButton" to="Menu" method="_on_skin_color_picker_button_color_changed"]
+[connection signal="item_selected" from="Menu/Main/gender_OptionButton" to="Menu" method="_on_gender_option_button_item_selected"]
+[connection signal="value_changed" from="Menu/Main/Age_Slider" to="Menu" method="_on_age_slider_value_changed"]
+[connection signal="item_selected" from="Menu/Main/Outfit_OptionButton" to="Menu" method="_on_outfit_option_button_item_selected"]
+[connection signal="item_selected" from="Menu/Main/Race_OptionButton" to="Menu" method="_on_race_option_button_item_selected"]
