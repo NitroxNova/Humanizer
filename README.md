@@ -3,6 +3,7 @@ in-game character menu will work out of the box, but if you want to re-generate 
 first download the latest nightly zip from http://files.makehumancommunity.org/plugins/  
 extract into the 'mpfb2_plugin' folder, and move the mpfb folder up a level  
 the path should be project_folder/mpfb2_plugin/mpfb/  
+then go to the data/targets folder and run:  gunzip -r *   
   
 # Humanizer
 convert MPFB2 to Godot4  
