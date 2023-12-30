@@ -7,59 +7,10 @@
 script/source = "extends Node3D
 
 var new_mesh = ArrayMesh.new()
-var blend_shapes = []
-var mesh_arrays = []
-var ST = SurfaceTool.new()
 
 func _ready():
-
-	new_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
-	make_basis()
-	for bs_index in $Unshaded_Human.get_blend_shape_count():
-		process_shape_key(bs_index)
-	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_arrays,blend_shapes)
+	new_mesh = Mesh_Shader.new($Unshaded_Human.mesh).run()
 	ResourceSaver.save(new_mesh,\"res://generate_mesh/human_shaded.res\")
-	
-func make_basis():
-	var surface_arrays = $Unshaded_Human.mesh.surface_get_arrays(0)
-	print(surface_arrays[Mesh.ARRAY_BONES].size())
-	ST.clear()
-	ST.set_skin_weight_count(SurfaceTool.SKIN_8_WEIGHTS)
-	ST.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in surface_arrays[Mesh.ARRAY_VERTEX].size():
-		var uv = surface_arrays[Mesh.ARRAY_TEX_UV][i]
-		ST.set_uv(uv)
-		var bones = surface_arrays[Mesh.ARRAY_BONES].slice(i*8,(i*8)+4)
-		ST.set_bones(bones)
-		var weights = surface_arrays[Mesh.ARRAY_WEIGHTS].slice(i*8,(i*8)+4)
-		ST.set_weights(weights)
-		var vertex = surface_arrays[Mesh.ARRAY_VERTEX][i]
-		ST.add_vertex(vertex)
-	for index in surface_arrays[Mesh.ARRAY_INDEX]:
-		ST.add_index(index)
-	ST.generate_normals()
-	ST.generate_tangents()
-	mesh_arrays = ST.commit_to_arrays()
-	print(mesh_arrays[Mesh.ARRAY_BONES].size())
-	print(ST.get_skin_weight_count())
-	ST.clear()
-
-func process_shape_key(bs_index):
-	var bs_name = $Unshaded_Human.mesh.get_blend_shape_name(bs_index)
-	ST.create_from_blend_shape($Unshaded_Human.mesh,0,bs_name)
-	ST.generate_normals()
-	ST.generate_tangents()
-#	ST.commit(new_mesh)
-	var commit_array = ST.commit_to_arrays()
-	new_mesh.add_blend_shape(bs_name)
-	var curr_bs = []
-	curr_bs.resize(Mesh.ARRAY_MAX)
-	curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
-	curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
-	curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
-	#print(commit_array[Mesh.ARRAY_VERTEX].size())
-	blend_shapes.append(curr_bs)
-	ST.clear()
 "
 
 [node name="generate_shading" type="Node3D"]
@@ -781,7 +732,6 @@ blend_shapes/hip-trans-out = 0.0
 blend_shapes/hip-trans-up = 0.0
 blend_shapes/hip-waist-down = 0.0
 blend_shapes/hip-waist-up = 0.0
-blend_shapes/l-ear-lobe-decr = 0.0
 blend_shapes/leg-valgus-decr = 0.0
 blend_shapes/leg-valgus-incr = 0.0
 blend_shapes/lowerarm-fat-decr = 0.0

@@ -27,37 +27,10 @@ func _ready():
 	for shape_name in shapekey_data.shape_keys:
 		process_shapekey(shape_name)
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface_arrays,blend_arrays)
-	make_shaded_mesh()
+	shaded_mesh = Mesh_Shader.new(new_mesh).run()
 	var material = load(folder + clothes_name + \"/material.tres\")
 	shaded_mesh.surface_set_material(0,material)
 	ResourceSaver.save(shaded_mesh,folder + clothes_name + \"/mesh.res\")
-
-func make_shaded_mesh():
-	blend_arrays = []
-	shaded_mesh.set_blend_shape_mode(Mesh.BLEND_SHAPE_MODE_NORMALIZED)
-	ST.create_from(new_mesh,0)
-	ST.generate_normals()
-	ST.generate_tangents()
-	var surface_arrays = ST.commit_to_arrays()
-	for shape_name in shapekey_data.shape_keys:
-		process_blend_shape_shading(shape_name)
-	shaded_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,surface_arrays,blend_arrays)
-	
-func process_blend_shape_shading(shape_name:String):
-	ST.clear()
-	ST.create_from_blend_shape(new_mesh,0,shape_name)
-	ST.generate_normals()
-	ST.generate_tangents()
-#	ST.commit(new_mesh)
-	var commit_array = ST.commit_to_arrays()
-	shaded_mesh.add_blend_shape(shape_name)
-	var curr_bs = []
-	curr_bs.resize(Mesh.ARRAY_MAX)
-	curr_bs[Mesh.ARRAY_VERTEX] = commit_array[Mesh.ARRAY_VERTEX]
-	curr_bs[Mesh.ARRAY_NORMAL] = commit_array[Mesh.ARRAY_NORMAL]
-	curr_bs[Mesh.ARRAY_TANGENT] = commit_array[Mesh.ARRAY_TANGENT]
-	#print(commit_array[Mesh.ARRAY_VERTEX].size())
-	blend_arrays.append(curr_bs)
 	
 func load_shapekey_data():
 	var data = Utils.read_json(\"res://process_shapekeys/shapekey_data.json\")
@@ -95,4 +68,3 @@ func process_shapekey(shape_name:String):
 
 [node name="generate_clothes_mesh" type="Node3D"]
 script = SubResource("GDScript_sufwu")
-clothes_name = "female_elegantsuit01"
