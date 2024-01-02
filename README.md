@@ -1,4 +1,7 @@
 IMPORTANT  
+for some reason the 'download from zip' option through the browser is corrupting the mesh resources,  
+causing missing dependencies, so you'll need to use 'git clone' through the command line instead   
+  
 in-game character menu will work out of the box, but if you want to re-generate the shapekeys or menu tabs:  
 first download the latest nightly 'belnder-4' zip from http://files.makehumancommunity.org/plugins/  
 extract into the 'mpfb2_plugin' folder, and move the mpfb folder up a level  
